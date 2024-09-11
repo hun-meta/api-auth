@@ -17,13 +17,13 @@ Instructions on how to install and set up the project. Include any prerequisites
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/repository.git
+git clone git@github.com:hun-meta/api-auth.git
 
 # Navigate into the directory
-cd repository
+cd api-auth
 
 # Install dependencies
-npm install
+npm ci
 ```
 
 ## Usage
