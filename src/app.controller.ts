@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ClsService } from 'nestjs-cls';
 
 // NOTE:
 // 1. Routing
@@ -8,13 +9,18 @@ import { AppService } from './app.service';
 // 4. Send Response
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly cls: ClsService
+  ) {}
 
   // Health Check Path(for AWS ALB)
   @Get(``)
   getDefaultResponse(): string {
 
-    console.log("Get Request By App Controller");
+    const requestId = this.cls.get('requestId');
+
+    console.log("Get Request By App Controller: %o", requestId);
 
     const currentDate = new Date();
     const curDatetime = `Date and Time: ${currentDate.toLocaleString()}`;
