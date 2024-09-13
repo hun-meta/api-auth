@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ClsModule, ClsMiddleware } from 'nestjs-cls';
-import { RequestIdMiddleware } from './common/request-id.middleware';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ClsModule, ClsMiddleware, ClsService } from 'nestjs-cls';
+import { RequestIdMiddleware } from '../common/request/request-id.middleware';
+import { AppController } from './services/app.controller';
+import { AppService } from './services/app.service';
 
 @Module({
   imports: [
@@ -13,6 +13,7 @@ import { AppService } from './app.service';
   ],
   controllers: [AppController],
   providers: [AppService],
+  // exports: [ClsService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

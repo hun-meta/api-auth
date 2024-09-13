@@ -5,7 +5,7 @@ import { ClsService } from 'nestjs-cls';
 
 // INFO:
 // RequestIdMiddleWare는 매 요청마다 고유한 ID를 생성, cls를 통해서 저장한다.
-// HTTP 요청 관련 정보 로깅, 요청 처리 완료 시 로깅
+// HTTP 요청 관련 정보 로깅, 요청 처리 완료/실패 시 로깅
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
   constructor(private readonly cls: ClsService) {}
@@ -14,25 +14,25 @@ export class RequestIdMiddleware implements NestMiddleware {
     const requestId = uuidv4();
     this.cls.set('requestId', requestId);
 
+    // TODO: Logger 관련 클래스 또는 함수를 만들어 정리할 필요가 있음
     let logMessage = `Request Start - ID: ${requestId}, Host: ${req.hostname}, Path: ${req.path}, IP: ${req.ip}`;
     if (req.method === 'GET') {
       logMessage += `, Query: ${JSON.stringify(req.query)}`;
     } else if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.method)) {
       logMessage += `, Body: ${JSON.stringify(req.body)}`;
     }
-
     console.log(logMessage);
 
 
-    res.on('finish', () => {
+    res.on('finish', () => { // request processed
       console.log(`Request Finished - ID: ${requestId}`);
     });
     
-    res.on('close', () => {
+    res.on('close', () => { // request closed by Client OR Server
       console.log(`Request Closed - ID: ${requestId}`);
     });
 
-    res.on('error', (err) => {
+    res.on('error', (err) => { // request failed by Error
       console.error(`Request Error - ID: ${requestId}, Error: ${err.message}`);
     });
 
