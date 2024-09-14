@@ -1,8 +1,9 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ClsModule, ClsMiddleware, ClsService } from 'nestjs-cls';
+import { ClsModule, ClsMiddleware } from 'nestjs-cls';
 import { RequestIdMiddleware } from '../common/request/request-id.middleware';
 import { AppController } from './services/app.controller';
 import { AppService } from './services/app.service';
+import { TestModule } from 'src/test/test.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { AppService } from './services/app.service';
       global: true,
       middleware: { mount: true },
     }),
+    TestModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ClsService } from 'nestjs-cls';
 import { BaseResponseDto } from 'src/common/response/dto/base-response.dto';
 import { DefaultDto } from '../dtos/default.dto';
 
@@ -12,8 +11,7 @@ import { DefaultDto } from '../dtos/default.dto';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-    private readonly cls: ClsService
+    private readonly appService: AppService
   ) {}
 
   // Default Path
