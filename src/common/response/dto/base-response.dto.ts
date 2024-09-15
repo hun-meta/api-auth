@@ -1,13 +1,25 @@
-import { IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ResponseInfo } from '../types';
 
 // 공통 응답 형식을 정의하는 DTO
-export class BaseResponseDto<T> {
+export class BaseResponse<T> {
+
+  constructor(
+    requestId: string,
+    responseInfo: ResponseInfo,
+    data: T,
+  ){
+    this.requestId = requestId;
+    this.responseInfo = responseInfo;
+    this.data = data;
+  }
+
   @IsString()
   requestId: string;
 
-  @IsNumber() // 정상 0, 비정상 그외 숫자
-  returnCode: number;
+  @IsObject()
+  responseInfo: ResponseInfo;
 
   @ValidateNested()
   @Type(() => Object)
