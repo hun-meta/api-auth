@@ -18,7 +18,7 @@ import { ResponseInterceptor } from 'src/common/response/interceptor/response.in
   controllers: [AppController],
   providers: [
     AppService,
-    {
+    { // 응답 변환 인터셉터
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     }

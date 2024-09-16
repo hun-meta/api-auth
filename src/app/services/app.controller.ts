@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AppService } from './app.service';
-import { BaseResponse } from 'src/common/response/dto/base-response.dto';
-import { DefaultDto } from '../dtos/default.dto';
+import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
+import { SUCCESS_RES } from '../types';
+import { ControllerResponse } from 'src/common/response/interface/controller-response.interface';
 
 // NOTE:
 // 1. Routing
@@ -9,21 +10,34 @@ import { DefaultDto } from '../dtos/default.dto';
 // 3. Call Service
 // 4. Send Response
 @Controller()
+@UsePipes(new ValidationPipe({transform: true}))
 export class AppController {
   constructor(
     private readonly appService: AppService
   ) {}
 
   // Default Path
-  @Get(``)
-  getDefaultResponse(): BaseResponse<DefaultDto> {
-    return this.appService.getDefaultResponse();
+  @Get()
+  getDefaultResponse(): ControllerResponse<DefaultDto> {
+    const data = this.appService.getDefaultResponse();
+    const response: ControllerResponse<DefaultDto> = { 
+      info: SUCCESS_RES,
+      data: data
+    };
+    console.log("Controller response: %o", response);
+    return response;
   }
 
-  // Health Check Path(for AWS ALB)
-  @Get(`health`)
-  getHealth(): BaseResponse<DefaultDto> {
-    return this.appService.getHealth();
+  // AWS Health Check Path
+  @Get('health')
+  getHealth(): ControllerResponse<HealthCheckDto> {
+    const data = this.appService.getHealth();
+    const response = { 
+      info: SUCCESS_RES,
+      data: data
+    };
+    console.log("Controller response: %o", response);
+    return response;
   }
 
 }
