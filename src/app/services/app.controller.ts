@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { BaseResponseDto } from 'src/common/response/dto/base-response.dto';
+import { BaseResponse } from 'src/common/response/dto/base-response.dto';
 import { DefaultDto } from '../dtos/default.dto';
 
 // NOTE:
@@ -16,13 +16,13 @@ export class AppController {
 
   // Default Path
   @Get(``)
-  getDefaultResponse(): BaseResponseDto<DefaultDto> {
+  getDefaultResponse(): BaseResponse<DefaultDto> {
     return this.appService.getDefaultResponse();
   }
 
   // Health Check Path(for AWS ALB)
   @Get(`health`)
-  getHealth(): BaseResponseDto<DefaultDto> {
+  getHealth(): BaseResponse<DefaultDto> {
     return this.appService.getHealth();
   }
 

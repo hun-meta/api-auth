@@ -11,7 +11,7 @@ import { ResponseInfo } from '../types';
 import { ClsService } from 'nestjs-cls';
   
 @Injectable()
-export class ApiResponseInterceptor implements NestInterceptor {
+export class ResponseInterceptor implements NestInterceptor {
     constructor(private readonly cls: ClsService) {}
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -19,6 +19,8 @@ export class ApiResponseInterceptor implements NestInterceptor {
         // get Response to set http status
         const response = context.switchToHttp().getResponse();
         const requestId = this.cls.get('requestId');
+
+        console.log("logging requestId at Interceptor: %o", requestId);
 
         return next.handle().pipe(
             map(
@@ -31,7 +33,7 @@ export class ApiResponseInterceptor implements NestInterceptor {
                         response.status(info.status);
                     }
 
-                    return new BaseResponse(``, info, data);
+                    return new BaseResponse(requestId, info, data);
                 },
             ),
         );

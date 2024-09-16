@@ -1,9 +1,11 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsModule, ClsMiddleware } from 'nestjs-cls';
 import { RequestIdMiddleware } from '../common/request/request-id.middleware';
 import { AppController } from './services/app.controller';
 import { AppService } from './services/app.service';
 import { TestModule } from 'src/test/test.module';
+import { ResponseInterceptor } from 'src/common/response/interceptor/response.interceptor';
 
 @Module({
   imports: [
@@ -14,7 +16,13 @@ import { TestModule } from 'src/test/test.module';
     TestModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    }
+  ],
   // exports: [ClsService],
 })
 export class AppModule {
