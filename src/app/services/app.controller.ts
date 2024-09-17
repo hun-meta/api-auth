@@ -1,8 +1,21 @@
-import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AppService, CheckDto } from './app.service';
 import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
 import { SUCCESS_RES } from '../types';
-import { ControllerResponse } from 'src/common/response/interface/controller-response.interface';
+import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
+import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class CheckQueryDto {
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(()=> Number)
+  param1: number;
+
+  @IsString()
+  @IsOptional()
+  param2?: string;
+}
 
 // NOTE:
 // 1. Routing
@@ -19,12 +32,11 @@ export class AppController {
   // Default Path
   @Get()
   getDefaultResponse(): ControllerResponse<DefaultDto> {
+
     const data = this.appService.getDefaultResponse();
-    const response: ControllerResponse<DefaultDto> = { 
-      info: SUCCESS_RES,
-      data: data
-    };
+    const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
     console.log("Controller response: %o", response);
+
     return response;
   }
 
@@ -32,12 +44,19 @@ export class AppController {
   @Get('health')
   getHealth(): ControllerResponse<HealthCheckDto> {
     const data = this.appService.getHealth();
-    const response = { 
-      info: SUCCESS_RES,
-      data: data
-    };
+    const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
     console.log("Controller response: %o", response);
+
     return response;
   }
 
+  @Get('check')
+  checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckDto> {
+    console.log("query: %o", query);
+    const data = this.appService.checkUsePipe(query.param1);
+    const response = ControllerResponse.create<CheckDto>(SUCCESS_RES, data);
+    console.log("Controller response: %o", response);
+
+    return response;
+  }
 }

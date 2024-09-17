@@ -2,7 +2,7 @@ import { IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ResponseInfo } from '../types';
 
-// 공통 응답 형식을 정의하는 DTO
+// API Response Value DTO
 export class BaseResponse<T> {
 
   constructor(

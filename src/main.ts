@@ -14,17 +14,17 @@ async function bootstrap() {
 
   const ABORT_ON_ERROR = process.env.ABORT_ON_ERROR === 'true';
   const app = await NestFactory.create(AppModule, { abortOnError: ABORT_ON_ERROR });
-  registerGlobals(app);
 
   // 응답객체 변환 전역 인터셉터 설정
   await app.listen(3000);
 }
 
-// 전역 직렬화 설정
+// NOTE: @Exclude를 추가해야하는 속성이 @Expose를 설정해야하는 속성보다 적어서 현재 사용 X
+// 전역 직렬화 옵션 설정 INFO: 모든 속성을 직렬화에서 제외, 필요하면 명시적 @Expose 필요
 export function registerGlobals(app: INestApplication) {
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector), {
-      strategy: 'excludeAll', // 모든 속성을 역직렬화에서 제외, INFO: 그래서 직렬화 시 필요한 속성에 @Expose 데코레이터를 명시해줘야 한다.
+      strategy: 'excludeAll', // 모든 속성을 역직렬화에서 제외
       excludeExtraneousValues: true, // 클래스에 정의되지 않은 속성은 변환 시에 제거한다.
     }),
   );
