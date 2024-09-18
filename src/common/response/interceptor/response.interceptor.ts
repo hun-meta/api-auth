@@ -29,7 +29,7 @@ export class ResponseInterceptor implements NestInterceptor {
                     response.status(info.status);
                 }
 
-                return new BaseResponse(requestId, info, data);
+                return BaseResponse.create<any>(requestId, info, data);
             },),
         );
     }

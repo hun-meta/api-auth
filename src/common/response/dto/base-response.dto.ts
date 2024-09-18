@@ -5,16 +5,6 @@ import { ResponseInfo } from '../types';
 // API Response Value DTO
 export class BaseResponse<T> {
 
-  constructor(
-    requestId: string,
-    responseInfo: ResponseInfo,
-    data: T,
-  ){
-    this.requestId = requestId;
-    this.responseInfo = responseInfo;
-    this.data = data;
-  }
-
   @IsString()
   requestId: string;
 
@@ -24,4 +14,13 @@ export class BaseResponse<T> {
   @ValidateNested()
   @Type(() => Object)
   data: T;
+
+  static create<T>(requestId: string, responseInfo: ResponseInfo, data: T): BaseResponse<T> {
+      const response = new BaseResponse<T>();
+      response.requestId = requestId;
+      response.responseInfo = responseInfo;
+      response.data = data;
+
+      return response;
+  }
 }
