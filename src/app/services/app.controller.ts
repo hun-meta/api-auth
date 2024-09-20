@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, DynamicModule, Get, Logger, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AppService, CheckDto } from './app.service';
 import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
 import { SUCCESS_RES } from '../types';
@@ -25,17 +25,25 @@ class CheckQueryDto {
 @Controller()
 @UsePipes(new ValidationPipe({transform: true}))
 export class AppController {
+
+  private logger = new Logger(AppController.name);
+
   constructor(
     private readonly appService: AppService
   ) {}
 
   // Default Path
   @Get()
-  getDefaultResponse(): ControllerResponse<DefaultDto> {
+  async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
 
     const data = this.appService.getDefaultResponse();
     const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
     console.log("Controller response: %o", response);
+    this.logger.log("winston log");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    this.logger.log("winston log response: %o", response);
+    this.logger.debug(response);
+    this.logger.error("error");
 
     return response;
   }

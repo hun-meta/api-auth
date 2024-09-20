@@ -7,6 +7,7 @@ import { AppService } from './services/app.service';
 import { TestModule } from 'src/test/test.module';
 import { ResponseInterceptor } from 'src/common/response/interceptor/response.interceptor';
 import { GlobalExceptionsFilter } from 'src/common/exception/global-exception.filter';
+import { winstonLogger } from 'src/common/logger/logger.config';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { GlobalExceptionsFilter } from 'src/common/exception/global-exception.fi
       global: true,
       middleware: { mount: true },
     }),
-    TestModule
+    TestModule, // 모듈 import 예시
+    winstonLogger // 로거 임포트
   ],
   controllers: [AppController],
   providers: [
