@@ -1,18 +1,21 @@
 // all-exceptions.filter.ts
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ClsService } from 'nestjs-cls';
+import { ControllerResponse } from '../response/dto/controller-response.dto';
 import { GlobalErrorDto } from './dto';
 import { BAD_REQUEST, CONFLICT, FORBIDDEN, GONE, INTERNAL_SERVER_ERROR, NOT_FOUND, NOT_IMPLEMENTED, PAYLOAD_TOO_LARGE, SERVICE_UNAVAILABLE, UNAUTHORIZED, UNPROCESSABLE_ENTITY, UNSUPPORTED_MEDIA_TYPE } from './types';
-import { BaseResponse } from '../response/dto/base-response.dto';
+import { ClsService } from 'nestjs-cls';
+import { LoggerService } from '../logger/logger.service';
 
-// TODO: 예외 필터에서 반환하는 값을 ResponseInterceptor에서 캐치하길 원하지만 동작하지 않음, 값이 사라짐?
 // INFO: 전역 에러 핸들링 필터(http 에러)
 @Catch()
 export class GlobalExceptionsFilter implements ExceptionFilter {
     constructor(
-        private readonly cls: ClsService
-      ) {}
+        private readonly cls: ClsService,
+        private readonly logger: LoggerService
+      ) {
+        this.logger.setContext(GlobalExceptionsFilter.name);
+      }
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -84,15 +87,21 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
         }
     }
 
-    console.log(`Request Error - ID: ${requestId}, Error: ${message}`);
-    console.error(`Request Error - ID: ${requestId}, Error: ${message}\nStack: ${stack}`);
+    this.logger.error(`Request Error - ID: ${requestId}, Error: ${message}`, stack);
 
     const errDto = GlobalErrorDto.create(message);
 
-    const baseResponse = BaseResponse.create<GlobalErrorDto>(requestId, info, errDto);
+    const controllerResponse = ControllerResponse.create<GlobalErrorDto>(info, errDto);
+
+    return controllerResponse;
 
     response
-      .status(info.status)
-      .json(baseResponse);
+      .status(status)
+      .json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        message: message,
+      });
   }
 }

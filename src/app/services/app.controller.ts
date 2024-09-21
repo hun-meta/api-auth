@@ -1,10 +1,11 @@
-import { Controller, DynamicModule, Get, Logger, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AppService, CheckDto } from './app.service';
 import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
 import { SUCCESS_RES } from '../types';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 class CheckQueryDto {
   @IsNotEmpty()
@@ -26,11 +27,12 @@ class CheckQueryDto {
 @UsePipes(new ValidationPipe({transform: true}))
 export class AppController {
 
-  private logger = new Logger(AppController.name);
-
   constructor(
-    private readonly appService: AppService
-  ) {}
+    private readonly appService: AppService,
+    private readonly logger: LoggerService
+  ) {
+    this.logger.setContext(AppController.name);
+  }
 
   // Default Path
   @Get()
@@ -38,12 +40,11 @@ export class AppController {
 
     const data = this.appService.getDefaultResponse();
     const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
-    console.log("Controller response: %o", response);
-    this.logger.log("winston log");
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    this.logger.log("winston log response: %o", response);
-    this.logger.debug(response);
-    this.logger.error("error");
+
+    this.logger.info("winston log");
+    this.logger.info("winston log response");
+    this.logger.info("message", response);
+    this.logger.error("error", "trace");
 
     return response;
   }
@@ -53,17 +54,18 @@ export class AppController {
   getHealth(): ControllerResponse<HealthCheckDto> {
     const data = this.appService.getHealth();
     const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
-    console.log("Controller response: %o", response);
 
     return response;
   }
 
   @Get('check')
   checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckDto> {
-    console.log("query: %o", query);
+    this.logger.debug("query", query);
+
     const data = this.appService.checkUsePipe(query.param1);
     const response = ControllerResponse.create<CheckDto>(SUCCESS_RES, data);
-    console.log("Controller response: %o", response);
+
+    this.logger.debug("Controller response", response);
 
     return response;
   }
