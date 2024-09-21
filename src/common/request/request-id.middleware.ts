@@ -19,7 +19,6 @@ export class RequestIdMiddleware implements NestMiddleware {
     const requestId = uuidv4();
     this.cls.set('requestId', requestId);
 
-    // TODO: Logger 관련 클래스 또는 함수를 만들어 정리할 필요가 있음
     let logMessage = `Request Start - ID: ${requestId}, Host: ${req.hostname}, Path: ${req.path}, IP: ${req.ip}`;
     if (req.method === 'GET') {
       logMessage += `, Query: ${JSON.stringify(req.query)}`;
