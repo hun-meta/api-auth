@@ -6,6 +6,7 @@ import { ControllerResponse } from 'src/common/response/dto/controller-response.
 import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 import { LoggerService } from 'src/common/logger/logger.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 class CheckQueryDto {
   @IsNotEmpty()
@@ -23,6 +24,7 @@ class CheckQueryDto {
 // 2. Request data collection and validation
 // 3. Call Service
 // 4. Send Response
+@ApiTags('default')
 @Controller()
 @UsePipes(new ValidationPipe({transform: true}))
 export class AppController {
@@ -34,23 +36,18 @@ export class AppController {
     this.logger.setContext(AppController.name);
   }
 
-  // Default Path
   @Get()
+  @ApiOperation({ summary: 'return datetime, for testing server(Default Path)' })
   async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
 
     const data = this.appService.getDefaultResponse();
     const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
 
-    this.logger.info("winston log");
-    this.logger.info("winston log response");
-    this.logger.info("message", response);
-    this.logger.error("error", "trace");
-
     return response;
   }
 
-  // AWS Health Check Path
-  @Get('health')
+  @Get('v1/health')
+  @ApiOperation({ summary: 'AWS Health Check Path' })
   getHealth(): ControllerResponse<HealthCheckDto> {
     const data = this.appService.getHealth();
     const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
@@ -58,7 +55,8 @@ export class AppController {
     return response;
   }
 
-  @Get('check')
+  @Get('v1/check')
+  @ApiOperation({ summary: 'for testing nestJS Decorator' })
   checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckDto> {
     this.logger.debug("query", query);
 

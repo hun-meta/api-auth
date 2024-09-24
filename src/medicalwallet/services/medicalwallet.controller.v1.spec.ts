@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MedicalwalletController } from './medicalwallet.controller';
+import { MedicalwalletController } from './medicalwallet.controller.v1';
 import { MedicalwalletService } from './medicalwallet.service';
 
 describe('MedicalwalletController', () => {

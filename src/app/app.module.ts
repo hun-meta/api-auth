@@ -3,13 +3,13 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ClsModule, ClsMiddleware } from 'nestjs-cls';
 import { RequestIdMiddleware } from '../common/request/request-id.middleware';
-import { AppController } from './services/app.controller';
+import { AppController } from './services/app.controller.v1';
 import { AppService } from './services/app.service';
-import { TestModule } from 'src/test/test.module';
 import { ResponseInterceptor } from 'src/common/response/interceptor/response.interceptor';
 import { GlobalExceptionsFilter } from 'src/common/exception/global-exception.filter';
 import { winstonLogger } from 'src/common/logger/logger.config';
 import { LoggerService } from 'src/common/logger/logger.service';
+import { MedicalwalletModule } from 'src/medicalwallet/medicalwallet.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { LoggerService } from 'src/common/logger/logger.service';
       middleware: { mount: true },
     }),
     ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
-    TestModule, // 모듈 import 예시
+    MedicalwalletModule,
     winstonLogger // 로거 임포트
   ],
   controllers: [AppController],
@@ -34,7 +34,7 @@ import { LoggerService } from 'src/common/logger/logger.service';
     LoggerService,
     AppService,
   ],
-  // exports: [ClsService],
+  exports: [LoggerService], // 하위 모듈에도 제공(싱글 톤 유지)
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

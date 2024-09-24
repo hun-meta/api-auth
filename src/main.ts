@@ -1,21 +1,38 @@
+// NestJS
+import { NestFactory, Reflector } from '@nestjs/core';
+import { INestApplication, ClassSerializerInterceptor } from '@nestjs/common';
+// 3rd Party
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { NestFactory, Reflector } from '@nestjs/core';
+// Local
 import { AppModule } from './app/app.module';
-import { INestApplication, ClassSerializerInterceptor } from '@nestjs/common';
 
 // Root Execution Function
 async function bootstrap() {
-  // 서버 실행 시간 로깅
+  // Loggin Start Time
   const currentDate = new Date();
   const unixTime = Math.floor(currentDate.getTime() / 1000);
+  console.log(`\nStarting API-Auth NestJS Application..\nExecution Date and Time: ${currentDate.toLocaleString()}\nUnix Time: ${unixTime}\n`);
 
   const ABORT_ON_ERROR = process.env.ABORT_ON_ERROR === 'true';
   const app = await NestFactory.create(AppModule, { abortOnError: ABORT_ON_ERROR, logger: false });
 
-  console.log(`\nStarting API-Auth NestJS Application..\nExecution Date and Time: ${currentDate.toLocaleString()}\nUnix Time: ${unixTime}\n`);
+  // Set Global Prefix for API-AUTH
+  app.setGlobalPrefix('api/auth');
 
-  // 응답객체 변환 전역 인터셉터 설정
+  // TODO: Swagger 테스트
+  // Swagger 설정
+  const config = new DocumentBuilder()
+    .setTitle('API 문서')
+    .setDescription('API 설명서입니다.')
+    .setVersion('1.0')
+    .addTag('API')
+    .build();
+    
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
+
   await app.listen(3000);
 }
 
