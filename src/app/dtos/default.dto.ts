@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class DefaultDto {
   @IsString()
@@ -18,6 +18,27 @@ export class HealthCheckDto {
   static create(datetime: string): HealthCheckDto {
     const dto = new HealthCheckDto();
     dto.datetime = datetime;
+    return dto;
+  }
+}
+
+export class CheckDto {
+  @IsNumber()
+  param: number;
+
+  static create(param: any): CheckDto {
+    const dto = new CheckDto();
+    dto.param = param;
+    return dto;
+  }
+}
+export class CheckUsePipeDto {
+  @IsNumber()
+  param: number;
+
+  static create(param: any): CheckUsePipeDto {
+    const dto = new CheckDto();
+    dto.param = param;
     return dto;
   }
 }

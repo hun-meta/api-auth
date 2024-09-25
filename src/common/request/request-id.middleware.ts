@@ -9,7 +9,8 @@ import { LoggerService } from '../logger/logger.service';
 // HTTP 요청 관련 정보 로깅, 요청 처리 완료/실패 시 로깅
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
-  constructor(private readonly cls: ClsService,
+  constructor(
+    private readonly cls: ClsService,
     private readonly logger: LoggerService
   ) {
     this.logger.setContext(RequestIdMiddleware.name);

@@ -1,12 +1,14 @@
 import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
-import { AppService, CheckDto } from './app.service';
-import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
+import { AppService } from './app.service';
+import { CheckUsePipeDto, DefaultDto, HealthCheckDto } from '../dtos/default.dto';
 import { SUCCESS_RES } from '../types';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
+import { checkUsePipeOpts, getDefaultResponseOpts, getHealthOpts } from '../swagger/swagger.metadata';
 
 class CheckQueryDto {
   @IsNotEmpty()
@@ -37,7 +39,7 @@ export class AppController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'return datetime, for testing server(Default Path)' })
+  @CustomSwaggerDecorator(getDefaultResponseOpts)
   async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
 
     const data = this.appService.getDefaultResponse();
@@ -47,7 +49,7 @@ export class AppController {
   }
 
   @Get('v1/health')
-  @ApiOperation({ summary: 'AWS Health Check Path' })
+  @CustomSwaggerDecorator(getHealthOpts)
   getHealth(): ControllerResponse<HealthCheckDto> {
     const data = this.appService.getHealth();
     const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
@@ -56,12 +58,12 @@ export class AppController {
   }
 
   @Get('v1/check')
-  @ApiOperation({ summary: 'for testing nestJS Decorator' })
-  checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckDto> {
+  @CustomSwaggerDecorator(checkUsePipeOpts)
+  checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckUsePipeDto> {
     this.logger.debug("query", query);
 
     const data = this.appService.checkUsePipe(query.param1);
-    const response = ControllerResponse.create<CheckDto>(SUCCESS_RES, data);
+    const response = ControllerResponse.create<CheckUsePipeDto>(SUCCESS_RES, data);
 
     this.logger.debug("Controller response", response);
 

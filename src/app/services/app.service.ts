@@ -1,17 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DefaultDto, HealthCheckDto } from '../dtos/default.dto';
+import { CheckUsePipeDto, DefaultDto, HealthCheckDto } from '../dtos/default.dto';
 import { IsNumber } from 'class-validator';
-
-export class CheckDto {
-  @IsNumber()
-  param: number;
-
-  static create(param: any): CheckDto {
-    const dto = new CheckDto();
-    dto.param = param;
-    return dto;
-  }
-}
 
 @Injectable()
 export class AppService {
@@ -35,12 +24,12 @@ export class AppService {
     return HealthCheckDto.create(curDatetime);
   }
 
-  checkUsePipe(value: any): CheckDto {
+  checkUsePipe(value: any): CheckUsePipeDto {
 
     const currentDate = new Date();
     const curDatetime = currentDate.toISOString();
 
-    return CheckDto.create(value);
+    return CheckUsePipeDto.create(value);
   }
 }
 

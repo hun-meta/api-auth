@@ -16,6 +16,7 @@ export class MedicalwalletController {
       this.logger.setContext(MedicalwalletController.name);
   }
 
+  // TODO: Swagger 설정 및 회원 가입 로직 설계
   // 회원 가입
   @Post('users')
   register(@Body() registerDto: RegisterDTO) : ControllerResponse<RegisterResDTO> {
