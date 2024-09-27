@@ -1,4 +1,12 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
+import { AutoCreate } from 'src/common/response/dto/base-response.dto';
+
+@AutoCreate()
+export class CheckAccountResDto {
+
+  @IsBoolean()
+  available: boolean; // return true if Account value is available
+}
 
 export class RegisterResDTO {
 

@@ -1,5 +1,15 @@
 import { IsString, Matches, IsDateString, IsIn } from "class-validator";
 
+// 로그인 계정 중복 확인 DTO
+export class CheckAccountDto {
+
+    @IsString()
+    @Matches(/^[A-Za-z0-9]{6,20}$/, {
+        message: 'Login Account must be 6 to 20 characters long and contain only Alphabet letters and numbers.',
+    })
+    account: string; // 6~20자(영어 숫자만 허용)
+  }
+
 // 회원가입 요청 DTO
 export class RegisterDTO {
 

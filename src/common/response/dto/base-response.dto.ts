@@ -24,3 +24,15 @@ export class BaseResponse<T> {
       return response;
   }
 }
+
+interface AutoCreatable<T> {
+  create(data: Partial<T>): T;
+}
+// Add Create method Decorator
+export function AutoCreate<T>() {
+  return function (target: new () => T) {
+    target.prototype.create = function (data: Partial<T>): T {
+      return Object.assign(new target(), data);
+    };
+  };
+}
