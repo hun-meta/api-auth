@@ -6,6 +6,8 @@ import { ControllerResponse } from 'src/common/response/dto/controller-response.
 import { CHECKED, REGISTERED } from '../types';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { CustomUndefinedError } from 'src/common/exception/errors';
+import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
+import { checkAccountOpts } from '../swagger/swagger.metadata';
 
 @Controller('v1/medicalwallet/')
 @UsePipes(new ValidationPipe({transform: true}))
@@ -20,6 +22,7 @@ export class MedicalwalletController {
     // TODO: Swagger 설정
     // 로그인 계정(ID) 중복확인
     @Post('users/account')
+    @CustomSwaggerDecorator(checkAccountOpts)
     async checkAccount(@Query() checkAccountDto: CheckAccountDto) : Promise<ControllerResponse<CheckAccountResDto>>{
 
         try{

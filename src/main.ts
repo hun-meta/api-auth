@@ -21,8 +21,7 @@ async function bootstrap() {
   // Set Global Prefix for API-AUTH
   app.setGlobalPrefix('api/auth');
 
-  // TODO: Swagger 테스트
-  // Swagger 설정
+  // Set Swagger docs
   const config = new DocumentBuilder()
     .setTitle('API 문서')
     .setDescription('API 설명서입니다.')

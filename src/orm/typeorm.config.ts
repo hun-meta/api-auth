@@ -2,8 +2,8 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export function TypeormConfig(configService: ConfigService){
-    const env = configService.get('NODE_ENV');
-    if(!['development, staging, production'].includes(env)){
+    const env = configService.get<string>('NODE_ENV');
+    if(!['development', 'staging', 'production'].includes(env)){
         throw Error('NODE_ENV Undefined Error');
     }
 

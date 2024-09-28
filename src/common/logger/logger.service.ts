@@ -16,8 +16,8 @@ export class LoggerService {
     this.logger.info(message, { context: this.context, ...meta });
   }
 
-  error(message: string, trace: string) {
-    this.logger.error(message, { context: this.context, trace });
+  error(message: string, meta: any = null) {
+    this.logger.error(message, { context: this.context, ...meta });
   }
 
   warn(message: string, meta: any = null) {
