@@ -2,7 +2,7 @@
 export class CustomUnExpectedError extends Error {
     code: number;
 
-    constructor(error: Error){
+    constructor(error: Error) {
         super(error.message);
         this.name = 'CustomUnExpectedError';
         this.code = 9000;

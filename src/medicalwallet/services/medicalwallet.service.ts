@@ -21,7 +21,7 @@ export class MedicalwalletService {
             return CheckAccountResDto.create(available);
         } catch (error) {
             if (error instanceof TypeORMError) {
-;               throw new DatabaseException(error);
+                throw new DatabaseException(error);
             }
             throw error;
         }

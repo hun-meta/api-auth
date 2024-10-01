@@ -7,9 +7,9 @@ export class ErrorHandler {
     handleError(error: any): Error {
         if (error instanceof DatabaseException || error instanceof HttpException) {
             return error;
-        }else if(error instanceof Error){
+        } else if (error instanceof Error) {
             return this.getUnExpectedError(error);
-        }else{
+        } else {
             return this.getUnDefinedError(error);
         }
     }

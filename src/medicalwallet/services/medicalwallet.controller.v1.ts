@@ -16,7 +16,7 @@ export class MedicalwalletController {
     constructor(
         private readonly medicalwalletService: MedicalwalletService,
         private readonly logger: LoggerService,
-        private readonly errHandler: ErrorHandler
+        private readonly errHandler: ErrorHandler,
     ) {
         this.logger.setContext(MedicalwalletController.name);
     }

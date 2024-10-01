@@ -1,4 +1,4 @@
-import { ResponseInfo } from "src/common/response/types";
+import { ResponseInfo } from 'src/common/response/types';
 
 // server error
 export const UNEXPECTED_ERROR: ResponseInfo = {

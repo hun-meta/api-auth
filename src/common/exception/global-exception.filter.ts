@@ -51,10 +51,10 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
         // http exception handling
         if (exception instanceof HttpException) {
             [info, message] = getHttpErrorInfo(exception);
-        }else if(exception instanceof CustomUnExpectedError){
+        } else if (exception instanceof CustomUnExpectedError) {
             info = UNEXPECTED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, UnDefinedError Occured`);
-        }else if(exception instanceof CustomUndefinedError){
+        } else if (exception instanceof CustomUndefinedError) {
             info = UNDEFINED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, UnExpectedError Occured`);
         }
