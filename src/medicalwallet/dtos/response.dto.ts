@@ -1,15 +1,18 @@
 import { IsBoolean, IsString } from 'class-validator';
-import { AutoCreate } from 'src/common/response/dto/base-response.dto';
 
-@AutoCreate()
 export class CheckAccountResDto {
+    @IsBoolean()
+    available: boolean; // return true if Account value is available
 
-  @IsBoolean()
-  available: boolean; // return true if Account value is available
+    static create(available: boolean): CheckAccountResDto {
+        const dto = new CheckAccountResDto();
+        dto.available = available;
+
+        return dto;
+    }
 }
 
 export class RegisterResDTO {
-
     @IsString()
     user_id: string;
 
@@ -22,5 +25,5 @@ export class RegisterResDTO {
         dto.dateTime = dateTime;
 
         return dto;
-  }
+    }
 }

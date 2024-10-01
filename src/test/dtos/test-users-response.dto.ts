@@ -1,19 +1,19 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 
 export class TodoResponse {
-  id: string;
+    id: string;
 
-  completed: boolean;
+    completed: boolean;
 }
 
 export class UsersResponseDto {
-  id: string;
+    id: string;
 
-  @Exclude()
-  firstName: string;
+    @Exclude()
+    firstName: string;
 
-  lastName: string;
+    lastName: string;
 
-  @Type(() => TodoResponse) // 🔑 don't forget to put this
-  todos: TodoResponse[];
+    @Type(() => TodoResponse) // 🔑 don't forget to put this
+    todos: TodoResponse[];
 }

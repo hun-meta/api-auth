@@ -1,7 +1,6 @@
-import { IsString, Matches, IsDateString, IsIn } from "class-validator";
+import { IsString, Matches, IsDateString, IsIn } from 'class-validator';
 
 export class RegisterDto {
-
     @IsString()
     @Matches(/^[A-Za-z0-9]{6,20}$/, {
         message: 'Login Account must be 6 to 20 characters long and contain only Alphabet letters and numbers.',
@@ -13,9 +12,13 @@ export class RegisterDto {
         [, ], {, }, ;, ', :, ", \, |, ,, ., <, >, /, ?
     */
     @IsString()
-    @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/, {
-        message: 'Password must be at least 8 characters long and include at least one Alphabet letter, one number, and one special character.',
-    })
+    @Matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
+        {
+            message:
+                'Password must be at least 8 characters long and include at least one Alphabet letter, one number, and one special character.',
+        },
+    )
     password: string; // 8자 이상 (특수문자 영어 숫자 조합 허용)
 
     @IsString()
@@ -38,4 +41,4 @@ export class RegisterDto {
         message: 'Sex code must be one of the following values: 1, 2, 3, 4.',
     })
     sex_code: string; // 1, 2, 3, 4 / 1자리
-  }
+}

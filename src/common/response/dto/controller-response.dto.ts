@@ -3,17 +3,17 @@ import { IsObject } from 'class-validator';
 
 // Controller Return Value DTO
 export class ControllerResponse<T> {
-  @IsObject()
-  info: ResponseInfo;
-  
-  @IsObject()
-  data: T;
+    @IsObject()
+    info: ResponseInfo;
 
-  static create<T>(info: ResponseInfo, data: T): ControllerResponse<T> {
-    const response = new ControllerResponse<T>();
-    response.info = info;
-    response.data = data;
+    @IsObject()
+    data: T;
 
-    return response;
-  }
+    static create<T>(info: ResponseInfo, data: T): ControllerResponse<T> {
+        const response = new ControllerResponse<T>();
+        response.info = info;
+        response.data = data;
+
+        return response;
+    }
 }

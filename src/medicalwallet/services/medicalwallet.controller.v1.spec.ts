@@ -3,18 +3,18 @@ import { MedicalwalletController } from './medicalwallet.controller.v1';
 import { MedicalwalletService } from './medicalwallet.service';
 
 describe('MedicalwalletController', () => {
-  let controller: MedicalwalletController;
+    let controller: MedicalwalletController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [MedicalwalletController],
-      providers: [MedicalwalletService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [MedicalwalletController],
+            providers: [MedicalwalletService],
+        }).compile();
 
-    controller = module.get<MedicalwalletController>(MedicalwalletController);
-  });
+        controller = module.get<MedicalwalletController>(MedicalwalletController);
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });

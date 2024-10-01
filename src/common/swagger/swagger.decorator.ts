@@ -1,6 +1,4 @@
-import {
-    applyDecorators,
-} from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import {
     ApiOperation,
     ApiQuery,
@@ -18,7 +16,7 @@ import {
     ApiHeaderOptions,
 } from '@nestjs/swagger';
 import { ResponseInfo } from '../response/types';
-  
+
 // INFO: Swagger api docs option interface
 export interface SwaggerOptions {
     summary?: string;
@@ -33,12 +31,12 @@ export interface SwaggerOptions {
 }
 
 // INFO: Swagger schema Creater for ApiResponseOptions
-export function createBody(info: ResponseInfo, data: Object){
+export function createBody(info: ResponseInfo, data: Object) {
     return {
-        requestId: "API Request UUID",
+        requestId: 'API Request UUID',
         responseInfo: info,
-        data: data
-    }
+        data: data,
+    };
 }
 
 // INFO: Swagger option object creater
@@ -51,14 +49,13 @@ export function CustomSwaggerDecorator(options: SwaggerOptions) {
     const decorators = [
         ...(options.summary ? [ApiOperation({ summary: options.summary })] : []),
         ...(options.tags ? [ApiTags(...options.tags)] : []),
-        ...(options.queries ? options.queries.map(query => ApiQuery(query)) : []),
-        ...(options.responses ? options.responses.map(response => ApiResponse(response)) : []),
-        ...(options.params ? options.params.map(param => ApiParam(param)) : []),
+        ...(options.queries ? options.queries.map((query) => ApiQuery(query)) : []),
+        ...(options.responses ? options.responses.map((response) => ApiResponse(response)) : []),
+        ...(options.params ? options.params.map((param) => ApiParam(param)) : []),
         ...(options.body ? [ApiBody(options.body)] : []),
-        ...(options.headers ? options.headers.map(header => ApiHeader(header)) : []),
+        ...(options.headers ? options.headers.map((header) => ApiHeader(header)) : []),
         ...(options.consumes ? [ApiConsumes(...options.consumes)] : []),
         ...(options.produces ? [ApiProduces(...options.produces)] : []),
     ];
     return applyDecorators(...decorators);
 }
-  

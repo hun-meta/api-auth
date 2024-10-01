@@ -8,14 +8,13 @@ import { plainToInstance } from 'class-transformer';
 export class TestController {
     constructor(
         private readonly testService: TestService,
-        private readonly cls: ClsService
+        private readonly cls: ClsService,
     ) {}
 
     // Default Path
     @Get(``)
     async getTestUsers(): Promise<UsersResponseDto[]> {
-      const users = await this.testService.getTestUsers();
-      return plainToInstance(UsersResponseDto, users);
+        const users = await this.testService.getTestUsers();
+        return plainToInstance(UsersResponseDto, users);
     }
 }
-

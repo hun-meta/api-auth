@@ -15,41 +15,51 @@ import { winstonLogger } from 'src/common/logger/logger.config';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { MedicalwalletModule } from 'src/medicalwallet/medicalwallet.module';
 import { TypeormConfig } from 'src/orm/typeorm.config';
+import { ErrorHandler } from 'src/common/exception/error.handler';
+import { DatabaseExceptionFilter } from 'src/common/exception/database-exception.filter';
 
 @Module({
-  imports: [
-    ClsModule.forRoot({
-      global: true,
-      middleware: { mount: true },
-    }),
-    ConfigModule.forRoot({ envFilePath: ['.env', `.env.${process.env.NODE_ENV}`], isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: TypeormConfig
-    }),
-    MedicalwalletModule,
-    winstonLogger
-  ],
-  controllers: [AppController],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: GlobalExceptionsFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
-    },
-    LoggerService,
-    AppService,
-  ],
-  exports: [LoggerService],
+    imports: [
+        ClsModule.forRoot({
+            global: true,
+            middleware: { mount: true },
+        }),
+        ConfigModule.forRoot({
+            envFilePath: ['.env', `.env.${process.env.NODE_ENV}`],
+            isGlobal: true,
+        }),
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: TypeormConfig,
+        }),
+        MedicalwalletModule,
+        winstonLogger,
+    ],
+    controllers: [AppController],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: GlobalExceptionsFilter,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: DatabaseExceptionFilter,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ResponseInterceptor,
+        },
+        LoggerService,
+        ErrorHandler,
+        AppService,
+    ],
+    exports: [LoggerService, ErrorHandler],
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ClsMiddleware, RequestIdMiddleware) // ClsMiddleware가 먼저 동작하도록 설정
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(ClsMiddleware, RequestIdMiddleware) // ClsMiddleware가 먼저 동작하도록 설정
+            .forRoutes({ path: '*', method: RequestMethod.ALL });
+    }
 }

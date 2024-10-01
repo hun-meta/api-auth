@@ -11,14 +11,14 @@ import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
 import { checkUsePipeOpts, getDefaultResponseOpts, getHealthOpts } from '../swagger/swagger.metadata';
 
 class CheckQueryDto {
-  @IsNotEmpty()
-  @IsNumber()
-  @Type(()=> Number)
-  param1: number;
+    @IsNotEmpty()
+    @IsNumber()
+    @Type(() => Number)
+    param1: number;
 
-  @IsString()
-  @IsOptional()
-  param2?: string;
+    @IsString()
+    @IsOptional()
+    param2?: string;
 }
 
 // NOTE:
@@ -28,45 +28,43 @@ class CheckQueryDto {
 // 4. Send Response
 @ApiTags('default')
 @Controller()
-@UsePipes(new ValidationPipe({transform: true}))
+@UsePipes(new ValidationPipe({ transform: true }))
 export class AppController {
+    constructor(
+        private readonly appService: AppService,
+        private readonly logger: LoggerService,
+    ) {
+        this.logger.setContext(AppController.name);
+    }
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly logger: LoggerService
-  ) {
-    this.logger.setContext(AppController.name);
-  }
+    @Get()
+    @CustomSwaggerDecorator(getDefaultResponseOpts)
+    async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
+        const data = this.appService.getDefaultResponse();
+        const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
 
-  @Get()
-  @CustomSwaggerDecorator(getDefaultResponseOpts)
-  async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
+        return response;
+    }
 
-    const data = this.appService.getDefaultResponse();
-    const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
+    @Get('v1/health')
+    @CustomSwaggerDecorator(getHealthOpts)
+    getHealth(): ControllerResponse<HealthCheckDto> {
+        const data = this.appService.getHealth();
+        const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
 
-    return response;
-  }
+        return response;
+    }
 
-  @Get('v1/health')
-  @CustomSwaggerDecorator(getHealthOpts)
-  getHealth(): ControllerResponse<HealthCheckDto> {
-    const data = this.appService.getHealth();
-    const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
+    @Get('v1/check')
+    @CustomSwaggerDecorator(checkUsePipeOpts)
+    checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckUsePipeDto> {
+        this.logger.debug('query', query);
 
-    return response;
-  }
+        const data = this.appService.checkUsePipe(query.param1);
+        const response = ControllerResponse.create<CheckUsePipeDto>(SUCCESS_RES, data);
 
-  @Get('v1/check')
-  @CustomSwaggerDecorator(checkUsePipeOpts)
-  checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckUsePipeDto> {
-    this.logger.debug("query", query);
+        this.logger.debug('Controller response', response);
 
-    const data = this.appService.checkUsePipe(query.param1);
-    const response = ControllerResponse.create<CheckUsePipeDto>(SUCCESS_RES, data);
-
-    this.logger.debug("Controller response", response);
-
-    return response;
-  }
+        return response;
+    }
 }

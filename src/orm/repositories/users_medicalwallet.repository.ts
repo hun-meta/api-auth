@@ -10,25 +10,18 @@ export class UsersMWRepository {
 
     constructor(
         private readonly logger: LoggerService,
-        private readonly dataSource: DataSource
+        private readonly dataSource: DataSource,
     ) {
         this.logger.setContext(AppController.name);
         this.usersRepository = this.dataSource.getRepository(UsersMedicalWallet);
     }
 
-    // TODO: database with typeorm Error handling
-    // TODO: prettier (tab size: 4)
-  // User를 account 컬럼으로 찾아서 반환
-  async findByAccount(account: string): Promise<UsersMedicalWallet | null>{
-    try{
+    // User를 account 컬럼으로 찾아서 반환
+    async findByAccount(account: string): Promise<UsersMedicalWallet | null> {
         const user = await this.usersRepository.findOne({
-            where: {account: account},
+            where: { account: account },
         });
-        this.logger.debug("user:", user);
+        this.logger.debug('user:', user);
         return user;
-    }catch(error){
-        this.logger.error("Error occured :", error);
-        throw error;
     }
-  }
 }

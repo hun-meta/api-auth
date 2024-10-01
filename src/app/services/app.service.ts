@@ -4,32 +4,28 @@ import { IsNumber } from 'class-validator';
 
 @Injectable()
 export class AppService {
-  constructor() {}
-  
-  getDefaultResponse(): DefaultDto {
+    constructor() {}
 
-    const welcomeStr = "Welcome to API - Auth\n";
-    const currentDate = new Date();
-    const curDatetime = currentDate.toISOString();
-    const responseStr = welcomeStr + curDatetime;
+    getDefaultResponse(): DefaultDto {
+        const welcomeStr = 'Welcome to API - Auth\n';
+        const currentDate = new Date();
+        const curDatetime = currentDate.toISOString();
+        const responseStr = welcomeStr + curDatetime;
 
-    return DefaultDto.create(responseStr);
-  }
+        return DefaultDto.create(responseStr);
+    }
 
-  getHealth(): HealthCheckDto {
+    getHealth(): HealthCheckDto {
+        const currentDate = new Date();
+        const curDatetime = currentDate.toISOString();
 
-    const currentDate = new Date();
-    const curDatetime = currentDate.toISOString();
+        return HealthCheckDto.create(curDatetime);
+    }
 
-    return HealthCheckDto.create(curDatetime);
-  }
+    checkUsePipe(value: any): CheckUsePipeDto {
+        const currentDate = new Date();
+        const curDatetime = currentDate.toISOString();
 
-  checkUsePipe(value: any): CheckUsePipeDto {
-
-    const currentDate = new Date();
-    const curDatetime = currentDate.toISOString();
-
-    return CheckUsePipeDto.create(value);
-  }
+        return CheckUsePipeDto.create(value);
+    }
 }
-

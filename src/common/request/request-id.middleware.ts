@@ -9,39 +9,40 @@ import { LoggerService } from '../logger/logger.service';
 // HTTP 요청 관련 정보 로깅, 요청 처리 완료/실패 시 로깅
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
-  constructor(
-    private readonly cls: ClsService,
-    private readonly logger: LoggerService
-  ) {
-    this.logger.setContext(RequestIdMiddleware.name);
-  }
-
-  use(req: Request, res: Response, next: NextFunction) {
-    const requestId = uuidv4();
-    this.cls.set('requestId', requestId);
-
-    let logMessage = `Request Start - ID: ${requestId}, Host: ${req.hostname}, Path: ${req.path}, IP: ${req.ip}`;
-    if (req.method === 'GET') {
-      logMessage += `, Query: ${JSON.stringify(req.query)}`;
-    } else if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.method)) {
-      logMessage += `, Body: ${JSON.stringify(req.body)}`;
+    constructor(
+        private readonly cls: ClsService,
+        private readonly logger: LoggerService,
+    ) {
+        this.logger.setContext(RequestIdMiddleware.name);
     }
-    this.logger.info(logMessage);
 
+    use(req: Request, res: Response, next: NextFunction) {
+        const requestId = uuidv4();
+        this.cls.set('requestId', requestId);
 
-    res.on('finish', () => { // request processed
-      this.logger.info(`Request Finished - ID: ${requestId}`);
-    });
-    
-    res.on('close', () => { // request closed by Client OR Server
-      this.logger.info(`Request Closed - ID: ${requestId}`);
-    });
+        let logMessage = `Request Start - ID: ${requestId}, Host: ${req.hostname}, Path: ${req.path}, IP: ${req.ip}`;
+        if (req.method === 'GET') {
+            logMessage += `, Query: ${JSON.stringify(req.query)}`;
+        } else if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.method)) {
+            logMessage += `, Body: ${JSON.stringify(req.body)}`;
+        }
+        this.logger.info(logMessage);
 
-    res.on('error', (err) => { // request failed by Error
-      this.logger.info(`Request Error - ID: ${requestId}, Error: ${err.message}`);
-    });
+        res.on('finish', () => {
+            // request processed
+            this.logger.info(`Request Finished - ID: ${requestId}`);
+        });
 
-    next();
-  }
+        res.on('close', () => {
+            // request closed by Client OR Server
+            this.logger.info(`Request Closed - ID: ${requestId}`);
+        });
 
+        res.on('error', (err) => {
+            // request failed by Error
+            this.logger.info(`Request Error - ID: ${requestId}, Error: ${err.message}`);
+        });
+
+        next();
+    }
 }
