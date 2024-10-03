@@ -2,20 +2,32 @@ import { Injectable } from '@nestjs/common';
 import { CheckAccountDto } from '../dtos/request.dto';
 import { CheckAccountResDto } from '../dtos/response.dto';
 import { UsersMWRepository } from 'src/orm/repositories/users_medicalwallet.repository';
-import { ConnectionIsNotSetError, ConnectionNotFoundError, QueryFailedError, TypeORMError } from 'typeorm';
+import { TypeORMError } from 'typeorm';
 import { DatabaseException } from 'src/orm/DatabaseException';
+import { LoggerService } from 'src/common/logger/logger.service';
+import { AccountTokenService } from 'src/common/crypto/token.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MedicalwalletService {
-    constructor(private readonly usersMWRepository: UsersMWRepository) {}
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly accountService: AccountTokenService,
+        private readonly usersMWRepository: UsersMWRepository
+    ) {
+        this.logger.setContext(MedicalwalletService.name);
+    }
 
     async checkAccount(checkAccountDto: CheckAccountDto): Promise<CheckAccountResDto> {
-        // TODO: TypeORM을 사용해서 Database query 및 중복 여부 확인
         try {
             let available: boolean = false;
-            const user = this.usersMWRepository.findByAccount(checkAccountDto.account);
+            let account_token: string = '';
+
+            const user = await this.usersMWRepository.findByAccount(checkAccountDto.account);
             if (!user) {
                 available = true;
+                account_token = this.accountService.createToken(this.config.get<string>('ISSUER'), 'unspecified', this.config.get<string>('MW'), checkAccountDto.account);
             }
 
             return CheckAccountResDto.create(available);

@@ -15,8 +15,9 @@ import { winstonLogger } from 'src/common/logger/logger.config';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { MedicalwalletModule } from 'src/medicalwallet/medicalwallet.module';
 import { TypeormConfig } from 'src/orm/typeorm.config';
-import { ErrorHandler } from 'src/common/exception/error.handler';
+import { ErrorHandlerModule } from 'src/common/exception/handler/error-handler.module';
 import { DatabaseExceptionFilter } from 'src/common/exception/database-exception.filter';
+import { CustomCryptoModule } from 'src/common/crypto/custom-crypto.module';
 
 @Module({
     imports: [
@@ -33,8 +34,10 @@ import { DatabaseExceptionFilter } from 'src/common/exception/database-exception
             inject: [ConfigService],
             useFactory: TypeormConfig,
         }),
+        CustomCryptoModule,
         MedicalwalletModule,
         winstonLogger,
+        ErrorHandlerModule
     ],
     controllers: [AppController],
     providers: [
@@ -51,10 +54,9 @@ import { DatabaseExceptionFilter } from 'src/common/exception/database-exception
             useClass: ResponseInterceptor,
         },
         LoggerService,
-        ErrorHandler,
-        AppService,
+        AppService
     ],
-    exports: [LoggerService, ErrorHandler],
+    exports: [LoggerService, ErrorHandlerModule],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {

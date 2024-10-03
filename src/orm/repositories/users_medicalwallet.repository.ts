@@ -12,7 +12,7 @@ export class UsersMWRepository {
         private readonly logger: LoggerService,
         private readonly dataSource: DataSource,
     ) {
-        this.logger.setContext(AppController.name);
+        this.logger.setContext(UsersMWRepository.name);
         this.usersRepository = this.dataSource.getRepository(UsersMedicalWallet);
     }
 
@@ -21,7 +21,7 @@ export class UsersMWRepository {
         const user = await this.usersRepository.findOne({
             where: { account: account },
         });
-        this.logger.debug('user:', user);
+        
         return user;
     }
 }

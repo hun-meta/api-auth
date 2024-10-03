@@ -12,26 +12,27 @@ export class LoggerService {
         this.context = context;
     }
 
-    private formatMeta(meta: any): object {
-        if (typeof meta === 'object' && meta !== null) {
-            return meta;
-        }
-        return { value: meta };
+    // private formatMeta(meta: any): object {
+    //     if (typeof meta === 'object' && meta !== null) {
+    //         return meta;
+    //     }
+    //     return { value: meta };
+    // }
+
+    info(message: string) {
+        this.logger.info(message, { context: this.context });
     }
 
-    info(message: string, meta: any = null) {
-        this.logger.info(message, { context: this.context, ...this.formatMeta(meta) });
+    error(message: string, stack: string = undefined, meta: any = undefined) {
+        this.logger.error(message, { context: this.context, stack, meta });
     }
 
-    error(message: string, stack: string = null, meta: any = null) {
-        this.logger.error(message, { context: this.context, stack, ...this.formatMeta(meta) });
+    warn(message: string) {
+        this.logger.warn(message, { context: this.context });
     }
 
-    warn(message: string, meta: any = null) {
-        this.logger.warn(message, { context: this.context, ...this.formatMeta(meta) });
-    }
-
-    debug(message: string, meta: any = null) {
-        this.logger.debug(message, { context: this.context, ...this.formatMeta(meta) });
+    debug(message: string, value: any = undefined) {
+        // this.logger.debug(message, { context: this.context, ...this.formatMeta(meta) });
+        this.logger.debug(message, { context: this.context, value });
     }
 }

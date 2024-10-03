@@ -5,10 +5,9 @@ import { CheckAccountResDto, RegisterResDTO } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { CHECKED, REGISTERED } from '../types';
 import { LoggerService } from 'src/common/logger/logger.service';
-import { CustomUndefinedError } from 'src/common/exception/errors';
 import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
 import { checkAccountOpts } from '../swagger/swagger.metadata';
-import { ErrorHandler } from 'src/common/exception/error.handler';
+import { ErrorHandlerService } from 'src/common/exception/handler/error-handler.service';
 
 @Controller('v1/medicalwallet/')
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -16,7 +15,7 @@ export class MedicalwalletController {
     constructor(
         private readonly medicalwalletService: MedicalwalletService,
         private readonly logger: LoggerService,
-        private readonly errHandler: ErrorHandler,
+        private readonly errHandler: ErrorHandlerService,
     ) {
         this.logger.setContext(MedicalwalletController.name);
     }

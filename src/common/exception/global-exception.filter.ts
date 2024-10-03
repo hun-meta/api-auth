@@ -58,7 +58,7 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
             info = UNDEFINED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, UnExpectedError Occured`);
         }
-        this.logger.error(`Request Error - ID: ${requestId}, Error: ${message}`, stack);
+        this.logger.error(`Request Error - ID: ${requestId}, Error: ${message}`, stack, exception);
 
         const errDto = GlobalErrorDto.create(message);
         const errResponse = BaseResponse.create(requestId, info, errDto);

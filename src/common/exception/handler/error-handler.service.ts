@@ -1,9 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { DatabaseException } from '../../orm/DatabaseException';
-import { CustomUndefinedError, CustomUnExpectedError } from './errors';
+import { DatabaseException } from '../../../orm/DatabaseException';
+import { CustomUndefinedError, CustomUnExpectedError } from '../errors';
 
 @Injectable()
-export class ErrorHandler {
+export class ErrorHandlerService {
     handleError(error: any): Error {
         if (error instanceof DatabaseException || error instanceof HttpException) {
             return error;

@@ -1,7 +1,8 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
 import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
 import { CHECKED } from '../types';
+import { DB_CONNECTION_ERROR } from 'src/common/exception/types/database.type';
 
 export const checkAccountOpts = createSwaggerOptions({
     summary: 'check account value is available for registering',
@@ -27,11 +28,6 @@ export const checkAccountOpts = createSwaggerOptions({
             schema: { example: createBody(CHECKED, { available: true }) },
         },
         {
-            status: 200,
-            description: 'request success, account not available',
-            schema: { example: createBody(CHECKED, { available: false }) },
-        },
-        {
             status: 400,
             description: 'Bad Request',
             schema: {
@@ -47,6 +43,15 @@ export const checkAccountOpts = createSwaggerOptions({
             schema: {
                 example: createBody(INTERNAL_SERVER_ERROR, {
                     message: 'Internal server error',
+                }),
+            },
+        },
+        {
+            status: 503,
+            description: 'Server Connection Error',
+            schema: {
+                example: createBody(DB_CONNECTION_ERROR, {
+                    message: 'Server unavailable',
                 }),
             },
         },
