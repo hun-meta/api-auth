@@ -9,6 +9,15 @@ export class CheckAccountDto {
     account: string; // 6~20자(영어 숫자만 허용)
 }
 
+// 휴대폰 인증번호 전송 DTO
+export class SendCodeDto {
+    @IsString()
+    @Matches(/^01\d{8,9}$/, {
+        message: 'Mobile phone number must be 10 or 11 digits long and start with "01".',
+    })
+    mobile: string; // 10~11자, 01로 시작
+}
+
 // 회원가입 요청 DTO
 export class RegisterDTO {
     @IsString()

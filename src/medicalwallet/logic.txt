@@ -47,3 +47,5 @@
 3 인증번호랑 비밀키 섞어서 verifyToken 서명
 4 인증번호를 입력 받은 번호로 전송
 5 verifyToken 응답
+
+[Medical Wallet] 인증번호는 [123456] 입니다.

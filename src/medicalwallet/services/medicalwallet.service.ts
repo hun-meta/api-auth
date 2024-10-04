@@ -30,7 +30,7 @@ export class MedicalwalletService {
                 account_token = this.accountService.createToken(this.config.get<string>('ISSUER'), 'unspecified', this.config.get<string>('MW'), checkAccountDto.account);
             }
 
-            return CheckAccountResDto.create(available);
+            return CheckAccountResDto.create(available, account_token);
         } catch (error) {
             if (error instanceof TypeORMError) {
                 throw new DatabaseException(error);

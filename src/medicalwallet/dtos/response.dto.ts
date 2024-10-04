@@ -4,9 +4,13 @@ export class CheckAccountResDto {
     @IsBoolean()
     available: boolean; // return true if Account value is available
 
-    static create(available: boolean): CheckAccountResDto {
+    @IsString()
+    account_token: string; // return token value if Account value is available
+
+    static create(available: boolean, account_token: string): CheckAccountResDto {
         const dto = new CheckAccountResDto();
         dto.available = available;
+        dto.account_token = account_token;
 
         return dto;
     }

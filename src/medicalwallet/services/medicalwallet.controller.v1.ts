@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MedicalwalletService } from './medicalwallet.service';
-import { CheckAccountDto, RegisterDTO } from '../dtos/request.dto';
+import { CheckAccountDto, RegisterDTO, SendCodeDto } from '../dtos/request.dto';
 import { CheckAccountResDto, RegisterResDTO } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { CHECKED, REGISTERED } from '../types';
@@ -20,7 +20,6 @@ export class MedicalwalletController {
         this.logger.setContext(MedicalwalletController.name);
     }
 
-    // TODO: Swagger 설정
     // 로그인 계정(ID) 중복확인
     @Post('users/account')
     @CustomSwaggerDecorator(checkAccountOpts)
@@ -29,6 +28,21 @@ export class MedicalwalletController {
             const checkAccountResDto = await this.medicalwalletService.checkAccount(checkAccountDto);
             const cResponse = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
 
+            return cResponse;
+        } catch (error) {
+            throw this.errHandler.handleError(error);
+        }
+    }
+
+    // TODO: Swagger 설정, api 구현
+    // 인증번호 전송(회원가입)
+    @Post('mobile/code')
+    // @CustomSwaggerDecorator(checkAccountOpts)
+    async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<CheckAccountResDto>> {
+        try {
+            const checkAccountResDto = await this.medicalwalletService.checkAccount(sendCodeDto);
+            const cResponse = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
+    
             return cResponse;
         } catch (error) {
             throw this.errHandler.handleError(error);
