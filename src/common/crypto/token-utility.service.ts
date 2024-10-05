@@ -2,6 +2,8 @@ import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoggerService } from '../logger/logger.service';
+import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from './types';
+import { ResponseInfo } from '../response/types';
 
 @Injectable()
 export class TokenUtilityService {
@@ -13,24 +15,58 @@ export class TokenUtilityService {
      * INFO: Decrypt and verify token
      *
      * @param token - JWT token to be verified
-     * @returns decoded payload if verification is successful
+     * @returns ResponseInfo if verification is successful
      */
-    // verifyToken(token: string): [string|null, Error|null] {
-    //     const jwt_secret = this.config.get<string>('JWT_SECRET');
-    //     try {
-    //         const decoded = jwt.verify(token, jwt_secret);
-    //         this.logger.debug('Token verified successfully:', decoded);
-    //         return decoded;
-    //     } catch (error) {
-    //         if (error.name === 'TokenExpiredError') {
-    //             this.logger.error('Token expired at:', error.expiredAt);
-    //         } else if (error.name === 'JsonWebTokenError') {
-    //             this.logger.error('Invalid token:', error.message);
-    //         } else {
-    //             this.logger.error('Token verification failed:', error);
-    //         }
-    //         throw error;
-    //     }
-    // }
+    verifyToken(token: string): ResponseInfo {
+        const jwt_secret = this.config.get<string>('JWT_SECRET');
+        try {
+            const decoded = jwt.verify(token, jwt_secret);
+            return JWT_VERIFIED;
+        } catch (error) {
+            if(error instanceof Error){
+                switch(error.name){
+                    case 'TokenExpiredError':
+                        return JWT_EXPIRED;
+                    case 'JsonWebTokenError':
+                        return JWT_INVALID;
+                    default:
+                        throw error;
+                }
+            }
+            throw error;
+        }
+    }
+
+    /**
+     * INFO: Decrypt and verify mobile verify token
+     *
+     * @param token - JWT token to be verified
+     * @param mobile - mobile phone number to verify
+     * @param ranNum - verify code from mobile phone
+     * @returns ResponseInfo if verification is successful
+     */
+    verifyMobileVerifyToken(token: string, mobile: string, ranNum: number): ResponseInfo {
+        const jwt_secret = this.config.get<string>('JWT_SECRET') + ranNum.toString();
+
+        try {
+            const decoded = jwt.verify(token, jwt_secret);
+            if(decoded.mobile !== mobile){
+                return JWT_INVALID;
+            }
+            return JWT_VERIFIED;
+        } catch (error) {
+            if(error instanceof Error){
+                switch(error.name){
+                    case 'TokenExpiredError':
+                        return JWT_EXPIRED;
+                    case 'JsonWebTokenError':
+                        return JWT_INVALID;
+                    default:
+                        throw error;
+                }
+            }
+            throw error;
+        }
+    }
     
 }

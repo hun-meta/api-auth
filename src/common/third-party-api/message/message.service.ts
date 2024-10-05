@@ -19,11 +19,12 @@ export class MessageService extends API {
         this.logger.setContext(MessageService.name);
     }
 
+    // TODO: do this after creating API-Message Server "/sms API"
     // send sms
     async sendSMS(number: string, message: string): Promise<[BaseResponse<any>, Error]> {
 
         const body = SendSmsDto.create(number, message);
-        const postConfig = this.createPostConfig('/sms', body);
+        const postConfig = this.createPostConfig('/v1/sms', body);
 
         try{
             const result = this.request<BaseResponse<SendSmsResDto>>(postConfig);
@@ -35,16 +36,6 @@ export class MessageService extends API {
                 const resData = axiosError.response?.data as BaseResponse<ErrorResDto>;
                 const data: ErrorResDto = resData.data as ErrorResDto;
                 switch (errorStatus) {
-                    // case 400:
-                    //   return [null, new ServiceApiError(BAD_REQUEST_ERROR, data.error)];
-                    // case 401:
-                    //   return [null, new ServiceApiError(INVALID_TOKEN_ERROR, data.error)];
-                    // case 404:
-                    //   return [null, new ServiceApiError(NOT_FOUND_ERROR, data.error)];
-                    // case 500:
-                    //   return [null, new ServiceApiError(SERVER_ERROR, data.error)];
-                    // default:
-                    //   return [null, new ServiceApiError(HTTP_ERROR, data.error)];
                 }
             }
         }
