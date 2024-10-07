@@ -14,8 +14,9 @@ export class MessageService extends API {
         private readonly logger: LoggerService,
         private readonly configService: ConfigService
     ) {
-        const smsServiceUrl = configService.get<string>('SMS_SERVICE_URL') as string;
-        super(smsServiceUrl);
+        super();
+        const smsServiceUrl = this.configService.get<string>('SMS_SERVICE_URL') as string;
+        this.initialBaseUrl(smsServiceUrl);
         this.logger.setContext(MessageService.name);
     }
 

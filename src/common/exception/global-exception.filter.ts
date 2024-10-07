@@ -38,19 +38,21 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         // const request = ctx.getRequest<Request>();
 
-        let message = 'Internal server error';
+        let errName = 'Error';
+        let errMessage = 'Internal server error';
         let stack = '';
         let info = INTERNAL_SERVER_ERROR;
         const requestId = this.cls.get('requestId') ?? 'Request ID undefined';
 
         // get StackTrace
         if (exception instanceof Error) {
+            errName = exception.name;
             stack = exception.stack || '';
         }
 
         // http exception handling
         if (exception instanceof HttpException) {
-            [info, message] = getHttpErrorInfo(exception);
+            [info, errMessage] = getHttpErrorInfo(exception);
         } else if (exception instanceof CustomUnExpectedError) {
             info = UNEXPECTED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, UnDefinedError Occured`);
@@ -58,9 +60,9 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
             info = UNDEFINED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, UnExpectedError Occured`);
         }
-        this.logger.error(`Request Error - ID: ${requestId}, Error: ${message}`, stack, exception);
+        this.logger.error(`Request Error - ID: ${requestId}, ${errName}: ${errMessage}`, stack, exception);
 
-        const errDto = GlobalErrorDto.create(message);
+        const errDto = GlobalErrorDto.create(errMessage);
         const errResponse = BaseResponse.create(requestId, info, errDto);
 
         response.status(errResponse.responseInfo.status).json(errResponse);

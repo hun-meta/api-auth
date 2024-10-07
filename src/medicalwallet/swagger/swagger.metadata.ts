@@ -2,7 +2,7 @@
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
 import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
 import { CHECKED } from '../types';
-import { DB_CONNECTION_ERROR } from 'src/common/exception/types/database.type';
+import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
 
 export const checkAccountOpts = createSwaggerOptions({
     summary: 'check account value is available for registering',

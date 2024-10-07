@@ -1,12 +1,12 @@
 // all-exceptions.filter.ts
 import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
-import { GlobalErrorDto } from './dto';
+import { GlobalErrorDto } from '../common/exception/dto';
 import { ClsService } from 'nestjs-cls';
-import { LoggerService } from '../logger/logger.service';
-import { BaseResponse } from '../response/dto/base-response.dto';
-import { ResponseInfo } from '../response/types';
-import { DatabaseException } from '../../orm/DatabaseException';
+import { LoggerService } from '../common/logger/logger.service';
+import { BaseResponse } from '../common/response/dto/base-response.dto';
+import { ResponseInfo } from '../common/response/types';
+import { DatabaseException } from './DatabaseException';
 import { DB_CONNECTION_FAILED, DB_QUERY_FAILED, DB_UNDEFINED } from 'src/orm/consts';
 import {
     DB_CONNECTION_ERROR,
@@ -17,7 +17,7 @@ import {
     DB_UNDEFINED_ERROR,
     DB_UNDELETABLE_ERROR,
     DB_WRONG_QUERY_ERROR,
-} from './types/database.type';
+} from './database.type';
 
 // INFO: 전역 DB 예외 필터
 @Catch(DatabaseException)
@@ -34,29 +34,30 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         const requestId = this.cls.get('requestId') ?? 'Request ID undefined';
 
+        let errName = 'DatabaseError';
         let info = null;
-        let message = '';
+        let errMessage = '';
 
         // database exception handling
         if (exception.name === DB_QUERY_FAILED) {
-            [info, message] = getQueryErrorInfo(exception);
+            [info, errMessage] = getQueryErrorInfo(exception);
             if (info === DB_UNDEFINED_ERROR) {
                 this.logger.error(`Request Error - ID: ${requestId}, Undefined DB QueryError Occured`);
             }
         } else if (exception.name === DB_CONNECTION_FAILED) {
             info = DB_CONNECTION_ERROR;
-            message = 'Server unavailable';
+            errMessage = 'Server unavailable';
         } else if (exception.name === DB_UNDEFINED) {
             info = DB_UNDEFINED_ERROR;
             this.logger.error(`Request Error - ID: ${requestId}, Undefined DB Error Occured`);
         }
 
         this.logger.error(
-            `Request Error - ID: ${requestId}, Error: ${message}`,
+            `Request Error - ID: ${requestId}, ${errName}: ${errMessage}`,
             exception.stack || exception.driveError.message || '',
         );
 
-        const errDto = GlobalErrorDto.create(message);
+        const errDto = GlobalErrorDto.create(errMessage);
         const errResponse = BaseResponse.create(requestId, info, errDto);
 
         response.status(errResponse.responseInfo.status).json(errResponse);

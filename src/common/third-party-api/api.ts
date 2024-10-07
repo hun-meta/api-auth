@@ -21,15 +21,11 @@ export interface AxiosError<T> {
 
 // API 서버 요청 관련 최상위 부모 클래스
 class API {
-  protected url: string;
   protected axiosInstance: AxiosInstance;
 
-  // 생성자, URL을 매개변수로 받음
-  constructor(url: string) {
-    this.url = url;
-
+  protected initialBaseUrl(url: string){
     this.axiosInstance = axios.create({
-      baseURL: this.url,
+      baseURL: url,
     });
   }
 
