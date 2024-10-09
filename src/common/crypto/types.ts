@@ -1,5 +1,5 @@
 import { ResponseInfo } from 'src/common/response/types';
-
+// jwt 8000~8999
 // 로그인 계정 중복 확인 (회원 가입 전)
 export const JWT_VERIFIED: ResponseInfo = {
     status: 200,

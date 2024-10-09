@@ -1,3 +1,4 @@
+// General 9000~9999
 // Any Error instances that I didn't Expected. (Must handle it after Error occured)
 export class CustomUnExpectedError extends Error {
     code: number;
