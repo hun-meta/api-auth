@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { LoggerService } from "src/common/logger/logger.service";
@@ -7,24 +7,31 @@ import { EnvUndefinedError } from "src/common/exception/errors";
 import { BaseResponse } from "src/common/response/dto/base-response.dto";
 import { SendSmsDto } from "./dtos/request.dto";
 import { ErrorResDto, SendSmsResDto } from "./dtos/response.dto";
+import { validate } from "class-validator";
 
 @Injectable()
-export class MessageService extends API {
+export class MessageService{
+
+    private apiMessageUrl: string // API-MESSAGE Server URL
+
     constructor(
         private readonly logger: LoggerService,
         private readonly configService: ConfigService
     ) {
-        super();
-        const smsServiceUrl = this.configService.get<string>('SMS_SERVICE_URL') as string;
-        this.initialBaseUrl(smsServiceUrl);
+        const smsServiceUrl = this.configService.get<string>('API_MESSAGE_URL') as string;
         this.logger.setContext(MessageService.name);
     }
 
     // TODO: do this after creating API-Message Server "/sms API"
     // send sms
-    async sendSMS(number: string, message: string): Promise<[BaseResponse<any>, Error]> {
+    async sendSMS(number: string, message: string): Promise<boolean> {
 
         const body = SendSmsDto.create(number, message);
+        const errors = await validate(body);
+        if (errors.length > 0) {
+            throw new InternalServerErrorException(`Validation failed: ${errors.map(err => Object.values(err.constraints)).join(', ')}`);
+        }
+
         const postConfig = this.createPostConfig('/v1/sms', body);
 
         try{

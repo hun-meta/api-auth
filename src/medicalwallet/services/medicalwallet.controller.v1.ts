@@ -20,8 +20,8 @@ export class MedicalwalletController {
         this.logger.setContext(MedicalwalletController.name);
     }
 
-    // 로그인 계정(ID) 중복확인
-    @Post('users/account')
+    // Login ID Duplication Check
+    @Post('users/check-account')
     @CustomSwaggerDecorator(checkAccountOpts)
     async checkAccount(@Body() checkAccountDto: CheckAccountDto): Promise<ControllerResponse<CheckAccountResDto>> {
         try {
@@ -35,8 +35,8 @@ export class MedicalwalletController {
     }
 
     // TODO: Swagger 설정, api 구현
-    // 인증번호 전송(회원가입)
-    @Post('mobile/code')
+    // Send verify code to Mobile for REGISTER
+    @Post('mobile/send-code')
     // @CustomSwaggerDecorator(checkAccountOpts)
     async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<CheckAccountResDto>> {
         try {
