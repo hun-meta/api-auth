@@ -1,7 +1,7 @@
-import { IsString, Matches, IsDateString, IsIn, IsNotEmpty, Validate } from 'class-validator';
+import { IsString, Matches, IsNotEmpty, Validate } from 'class-validator';
 import { IsByteLengthConstraint } from 'src/common/decorator/validator';
 
-// 로그인 계정 중복 확인 DTO
+// api-message SendSms Request data DTO
 export class SendSmsDto {
     @IsNotEmpty()
     @IsString()

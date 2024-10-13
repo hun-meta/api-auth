@@ -7,6 +7,7 @@ import { DatabaseException } from 'src/orm/DatabaseException';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { AccountTokenService } from 'src/common/crypto/token.service';
 import { ConfigService } from '@nestjs/config';
+import { MessageService } from 'src/common/third-party-api/api-message/message.service';
 
 @Injectable()
 export class MedicalwalletService {
@@ -14,11 +15,13 @@ export class MedicalwalletService {
         private readonly logger: LoggerService,
         private readonly config: ConfigService,
         private readonly accountService: AccountTokenService,
-        private readonly usersMWRepository: UsersMWRepository
+        private readonly usersMWRepository: UsersMWRepository,
+        private readonly messageService: MessageService
     ) {
         this.logger.setContext(MedicalwalletService.name);
     }
 
+    // Check Medical-Wallet login account for Register
     async checkAccount(checkAccountDto: CheckAccountDto): Promise<CheckAccountResDto> {
         try {
             let available: boolean = false;
@@ -37,5 +40,14 @@ export class MedicalwalletService {
             }
             throw error;
         }
+    }
+
+    // TODO: keep going
+    // Send verify Code to mobile & create verifyToken for Register
+    async sendMobileCode(checkAccountDto: CheckAccountDto): Promise<SendMobileResDto> {
+        // 1. create random code
+        // 2. create verify token with random code
+        // 3. send code to mobile
+        // 4. response with verify token
     }
 }

@@ -1,27 +1,10 @@
-import { IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
+// api-message SendSms Response data DTO
 export class SendSmsResDto {
-    
+
+    @IsNotEmpty()
     @IsString()
-    message: string;
+    requestId: string;
 
-    static create(message: string): SendSmsResDto {
-        const dto = new SendSmsResDto();
-        dto.message = message;
-
-        return dto;
-    }
-}
-
-export class ErrorResDto {
-
-    @IsString()
-    message: string;
-
-    static create(message: string): ErrorResDto {
-        const dto = new ErrorResDto();
-        dto.message = message;
-
-        return dto;
-    }
 }
