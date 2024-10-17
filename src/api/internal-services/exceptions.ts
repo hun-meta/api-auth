@@ -1,7 +1,5 @@
-import { ResponseInfo } from 'src/common/response/types';
-
-// Base Exception for own MSA Service
-export class ApiServiceException extends Error {
+// Base Exception for Internal Service
+export class InternalServiceException extends Error {
 
     public readonly status: number;
     public readonly requestId: string;

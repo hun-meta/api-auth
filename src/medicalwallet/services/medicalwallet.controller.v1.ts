@@ -1,13 +1,12 @@
 import { Body, Controller, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MedicalwalletService } from './medicalwallet.service';
 import { CheckAccountDto, RegisterDTO, SendCodeDto } from '../dtos/request.dto';
-import { CheckAccountResDto, RegisterResDTO } from '../dtos/response.dto';
+import { CheckAccountResDto, RegisterResDTO, SendCodeResDto } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
-import { CHECKED, REGISTERED } from '../types';
+import { CHECKED, REGISTERED, SENT_CODE } from '../constants/response-info.constants';
 import { LoggerService } from 'src/common/logger/logger.service';
 import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
-import { checkAccountOpts } from '../swagger/swagger.metadata';
-import { ErrorHandlerService } from 'src/common/exception/handler/error-handler.service';
+import { checkAccountOpts, sendCodeOpts } from '../swagger/swagger.metadata';
 
 @Controller('v1/medicalwallet/')
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -15,7 +14,6 @@ export class MedicalwalletController {
     constructor(
         private readonly medicalwalletService: MedicalwalletService,
         private readonly logger: LoggerService,
-        private readonly errHandler: ErrorHandlerService,
     ) {
         this.logger.setContext(MedicalwalletController.name);
     }
@@ -24,29 +22,21 @@ export class MedicalwalletController {
     @Post('users/check-account')
     @CustomSwaggerDecorator(checkAccountOpts)
     async checkAccount(@Body() checkAccountDto: CheckAccountDto): Promise<ControllerResponse<CheckAccountResDto>> {
-        try {
-            const checkAccountResDto = await this.medicalwalletService.checkAccount(checkAccountDto);
-            const cResponse = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
+        const checkAccountResDto = await this.medicalwalletService.checkAccount(checkAccountDto);
+        const response = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
 
-            return cResponse;
-        } catch (error) {
-            throw this.errHandler.handleError(error);
-        }
+        return response;
     }
 
     // TODO: Swagger 설정, api 구현
     // Send verify code to Mobile for REGISTER
     @Post('mobile/send-code')
-    // @CustomSwaggerDecorator(checkAccountOpts)
-    async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<CheckAccountResDto>> {
-        try {
-            const checkAccountResDto = await this.medicalwalletService.checkAccount(sendCodeDto);
-            const cResponse = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
+    @CustomSwaggerDecorator(sendCodeOpts)
+    async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<SendCodeResDto>> {
+        const sendCodeResDto = await this.medicalwalletService.sendMobileCode(sendCodeDto);
+        const response = ControllerResponse.create<SendCodeResDto>(SENT_CODE, sendCodeResDto);
     
-            return cResponse;
-        } catch (error) {
-            throw this.errHandler.handleError(error);
-        }
+        return response;
     }
 
     // TODO: Swagger 설정

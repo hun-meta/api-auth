@@ -16,6 +16,18 @@ export class CheckAccountResDto {
     }
 }
 
+export class SendCodeResDto {
+    @IsString()
+    verifyToken: string; // <jwt token for verify mobile>
+
+    static create(verifyToken: string): SendCodeResDto {
+        const dto = new SendCodeResDto();
+        dto.verifyToken = verifyToken;
+
+        return dto;
+    }
+}
+
 export class RegisterResDTO {
     @IsString()
     user_id: string;

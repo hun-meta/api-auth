@@ -127,8 +127,8 @@ export class MobileTokenService implements TokenService {
      * @param mobile - mobile
      * @returns mobile token.
      */
-    createVerifyToken(iss: string, sub: string, aud: string, mobile: string, ranNum: number): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET') + ranNum.toString();
+    createVerifyToken(iss: string, sub: string, aud: string, mobile: string, ranNum: string): string {
+        const jwt_secret = this.config.get<string>('JWT_SECRET') + ranNum;
         const expiresIn = this.config.get<string>('EX_MOBILE_VERIFY');
         const payload = { iss, sub, aud, mobile };
 

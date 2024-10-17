@@ -45,7 +45,6 @@ export class MessageService{
                 const requestId = data.requestId || 'undefined';
                 const errMessage = data.data.message || error.message;
 
-                // TODO: create ApiServiceException filter, to check Error from our own MSA Service
                 throw new ApiMessageException(status, requestId, errMessage);
             }
             throw error;
