@@ -4,11 +4,19 @@ import { ConfigService } from '@nestjs/config';
 import { LoggerService } from '../logger/logger.service';
 import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from './types';
 import { ResponseInfo } from '../response/types';
+import { KeyService } from './key.service';
 
 @Injectable()
 export class TokenUtilityService {
-    constructor(private readonly logger: LoggerService, private readonly config: ConfigService) {
+    private readonly publicKey: string;
+
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly keyService: KeyService
+    ) {
         this.logger.setContext(TokenUtilityService.name);
+        this.publicKey = this.keyService.getPublicKey();
     }
 
     /**
@@ -18,9 +26,8 @@ export class TokenUtilityService {
      * @returns ResponseInfo if verification is successful
      */
     verifyToken(token: string): ResponseInfo {
-        const jwt_secret = this.config.get<string>('JWT_SECRET');
         try {
-            const decoded = jwt.verify(token, jwt_secret);
+            const decoded = jwt.verify(token, this.publicKey, { algorithms: ['RS256'] });
             return JWT_VERIFIED;
         } catch (error) {
             if(error instanceof Error){
@@ -46,7 +53,7 @@ export class TokenUtilityService {
      * @returns ResponseInfo if verification is successful
      */
     verifyMobileVerifyToken(token: string, mobile: string, ranNum: number): ResponseInfo {
-        const jwt_secret = this.config.get<string>('JWT_SECRET') + ranNum.toString();
+        const jwt_secret = this.config.get<string>('JWT_MOBILE_SECRET') + ranNum.toString();
 
         try {
             const decoded = jwt.verify(token, jwt_secret);

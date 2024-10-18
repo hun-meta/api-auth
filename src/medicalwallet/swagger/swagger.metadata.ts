@@ -1,5 +1,5 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
 import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
 import { CHECKED, SENT_CODE } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
@@ -25,7 +25,7 @@ export const checkAccountOpts = createSwaggerOptions({
         {
             status: 200,
             description: 'request success, account available',
-            schema: { example: createBody(CHECKED, { available: true, account_token: '<jwt token value>' }) },
+            schema: { example: createBody(CHECKED, { available: true, accountToken: '<jwt token value>' }) },
         },
         {
             status: 400,
@@ -79,7 +79,7 @@ export const sendCodeOpts = createSwaggerOptions({
         {
             status: 202,
             description: 'request success, verifivation code sent',
-            schema: { example: createBody(SENT_CODE, { mobile_token: '<jwt token value>' }) },
+            schema: { example: createBody(SENT_CODE, { mobileVerifyToken: '<jwt token value>' }) },
         },
         {
             status: 400,

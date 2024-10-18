@@ -7,7 +7,7 @@ import { BaseResponse } from 'src/common/response/dto/base-response.dto';
 import { ResponseInfo } from 'src/common/response/types';
 import { InternalServiceException } from './exceptions';
 import { ApiMessageException } from './api-message/ApiMessageException';
-import { INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
+import { INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
 import { INTERNAL_SERVICE_EXCEPTION } from './constants/exception-name.constants';
 import { INTERNAL_SERVICE_ERROR, MESSAGE_SERVICE_ERROR } from './constants/response-info.constants';
 

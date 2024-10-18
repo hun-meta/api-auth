@@ -28,15 +28,15 @@ export class MedicalwalletService {
     async checkAccount(checkAccountDto: CheckAccountDto): Promise<CheckAccountResDto> {
         try {
             let available: boolean = false;
-            let account_token: string = '';
+            let accountToken: string = '';
 
             const user = await this.usersMWRepository.findByAccount(checkAccountDto.account);
             if (!user) {
                 available = true;
-                account_token = this.accountService.createToken(this.config.get<string>('ISSUER'), 'unspecified', this.config.get<string>('MW'), checkAccountDto.account);
+                accountToken = this.accountService.createToken(this.config.get<string>('ISSUER'), 'unspecified', this.config.get<string>('MW'), checkAccountDto.account);
             }
 
-            return CheckAccountResDto.create(available, account_token);
+            return CheckAccountResDto.create(available, accountToken);
         } catch (error) {
             if (error instanceof TypeORMError) {
                 throw new DatabaseException(error);
@@ -56,15 +56,15 @@ export class MedicalwalletService {
         const code = this.randomService.getRandNum(6);
 
         // 2. create verify token with random code
-        const verifyToken = this.mobileService.createVerifyToken(issuer, subject, audience, mobile, code);
+        const mobileVerifyToken = this.mobileService.createVerifyToken(issuer, subject, audience, mobile, code);
 
         // TODO: release commentation after docker settings
         // 3. send code to mobile
-        // const message = `[${audience}]\n회원가입 인증번호는 [${code}]입니다.`
-        // const _ = await this.messageService.sendSMS(mobile, message);
+        const message = `[${audience}]\n회원가입 인증번호는 [${code}]입니다.`
+        const _ = await this.messageService.sendSMS(mobile, message);
 
         // 4. response with verify token
-        const sendCodeResDto = SendCodeResDto.create(verifyToken);
+        const sendCodeResDto = SendCodeResDto.create(mobileVerifyToken);
         return sendCodeResDto;
     }
 }

@@ -1,0 +1,15 @@
+services:
+  api-auth:
+    build:
+      context: ../..
+      dockerfile: docker/development/Dockerfile
+    image: api-auth-development:latest
+    container_name: api-auth-development
+    platform: ${SERVER_PLATFORM}
+    ports:
+      - "3000:3000"
+    environment: # This configuration can override the settings in the Dockerfile.
+      - PORT=3000
+    volumes:
+      - ../../logs:/app/logs
+    command: ["npm", "run", "start:dev"] # Also can override the settings in the Dockerfile.

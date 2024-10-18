@@ -5,12 +5,12 @@ export class CheckAccountResDto {
     available: boolean; // return true if Account value is available
 
     @IsString()
-    account_token: string; // return token value if Account value is available
+    accountToken: string; // return token value if Account value is available
 
-    static create(available: boolean, account_token: string): CheckAccountResDto {
+    static create(available: boolean, accountToken: string): CheckAccountResDto {
         const dto = new CheckAccountResDto();
         dto.available = available;
-        dto.account_token = account_token;
+        dto.accountToken = accountToken;
 
         return dto;
     }
@@ -18,11 +18,11 @@ export class CheckAccountResDto {
 
 export class SendCodeResDto {
     @IsString()
-    verifyToken: string; // <jwt token for verify mobile>
+    mobileVerifyToken: string; // <jwt token for verify mobile>
 
-    static create(verifyToken: string): SendCodeResDto {
+    static create(mobileVerifyToken: string): SendCodeResDto {
         const dto = new SendCodeResDto();
-        dto.verifyToken = verifyToken;
+        dto.mobileVerifyToken = mobileVerifyToken;
 
         return dto;
     }
