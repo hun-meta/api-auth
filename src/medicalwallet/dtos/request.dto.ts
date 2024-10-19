@@ -1,7 +1,8 @@
-import { IsString, Matches, IsDateString, IsIn } from 'class-validator';
+import { IsString, Matches, IsDateString, IsIn, IsNotEmpty } from 'class-validator';
 
 // 로그인 계정 중복 확인 DTO
 export class CheckAccountDto {
+    @IsNotEmpty()
     @IsString()
     @Matches(/^[A-Za-z0-9]{6,20}$/, {
         message: 'Login Account must be 6 to 20 characters long and contain only Alphabet letters and numbers.',
@@ -11,15 +12,17 @@ export class CheckAccountDto {
 
 // 휴대폰 인증번호 전송 DTO
 export class SendCodeDto {
+    @IsNotEmpty()
     @IsString()
     @Matches(/^01\d{8,9}$/, {
-        message: 'Mobile phone number must be 10 or 11 digits long and start with "01".',
+        message: 'Mobile phone number must be 10 or 11 digits long and start with 01.',
     })
     mobile: string; // 10~11자, 01로 시작
 }
 
 // 회원가입 요청 DTO
 export class RegisterDTO {
+    @IsNotEmpty()
     @IsString()
     @Matches(/^[A-Za-z0-9]{6,20}$/, {
         message: 'Login Account must be 6 to 20 characters long and contain only Alphabet letters and numbers.',

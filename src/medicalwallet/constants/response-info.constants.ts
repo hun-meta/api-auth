@@ -13,3 +13,10 @@ export const REGISTERED: ResponseInfo = {
     returnCode: 0,
     message: 'Register Success',
 };
+
+// 인증번호 전송 완료
+export const SENT_CODE: ResponseInfo = {
+    status: 202,
+    returnCode: 0,
+    message: 'Sending message Success',
+}

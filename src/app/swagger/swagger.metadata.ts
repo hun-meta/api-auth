@@ -1,5 +1,5 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
 import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
 import { SUCCESS_RES } from '../types';
 

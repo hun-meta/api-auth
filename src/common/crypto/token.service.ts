@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { EnvUndefinedError } from '../exception/errors';
 import { LoggerService } from '../logger/logger.service';
+import { KeyService } from './key.service';
 
 interface TokenService {
     createToken(iss: string, sub: string, aud: string, identifier: string): string;
@@ -10,8 +11,15 @@ interface TokenService {
 
 @Injectable()
 export class AccessTokenService implements TokenService {
-    constructor(private readonly logger: LoggerService, private readonly config: ConfigService) {
+    private readonly privateKey: string;
+
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly keyService: KeyService
+    ) {
         this.logger.setContext(AccessTokenService.name);
+        this.privateKey = this.keyService.getPrivateKey();
     }
 
     /**
@@ -23,22 +31,29 @@ export class AccessTokenService implements TokenService {
      * @returns access token.
      */
     createToken(iss: string, sub: string, aud: string): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET');
         const expiresIn = this.config.get<string>('EX_ACCESS');
         const payload = { iss, sub, aud };
 
-        if (!jwt_secret || !expiresIn) {
-            throw new EnvUndefinedError(['JWT_SECRET', 'EX_ACCESS']);
+        if (!expiresIn) {
+            throw new EnvUndefinedError(['EX_ACCESS']);
         }
 
-        return jwt.sign(payload, jwt_secret, { expiresIn });
+        return jwt.sign(payload, this.privateKey, { expiresIn });
     }
 }
 
 @Injectable()
 export class RefreshTokenService implements TokenService {
-    constructor(private readonly logger: LoggerService, private readonly config: ConfigService) {
+
+    private readonly privateKey: string;
+
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly keyService: KeyService
+    ) {
         this.logger.setContext(AccessTokenService.name);
+        this.privateKey = this.keyService.getPrivateKey();
     }
 
     /**
@@ -51,22 +66,29 @@ export class RefreshTokenService implements TokenService {
      * @returns refresh token.
      */
     createToken(iss: string, sub: string, aud: string, device_id: string): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET');
         const expiresIn = this.config.get<string>('EX_REFRESH');
         const payload = { iss, sub, aud, device_id };
 
-        if (!jwt_secret || !expiresIn) {
-            throw new EnvUndefinedError(['JWT_SECRET', 'EX_REFRESH']);
+        if (!expiresIn) {
+            throw new EnvUndefinedError(['EX_REFRESH']);
         }
 
-        return jwt.sign(payload, jwt_secret, { expiresIn });
+        return jwt.sign(payload, this.privateKey, { expiresIn });
     }
 }
 
 @Injectable()
 export class AccountTokenService implements TokenService {
-    constructor(private readonly logger: LoggerService, private readonly config: ConfigService) {
+
+    private readonly privateKey: string;
+
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly keyService: KeyService
+    ) {
         this.logger.setContext(AccountTokenService.name);
+        this.privateKey = this.keyService.getPrivateKey();
     }
 
     /**
@@ -79,22 +101,29 @@ export class AccountTokenService implements TokenService {
      * @returns account token.
      */
     createToken(iss: string, sub: string, aud: string, account: string): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET');
         const expiresIn = this.config.get<string>('EX_REGISTER');
         const payload = { iss, sub, aud, account };
 
-        if (!jwt_secret || !expiresIn) {
-            throw new EnvUndefinedError(['JWT_SECRET', 'EX_REGISTER']);
+        if (!expiresIn) {
+            throw new EnvUndefinedError(['EX_REGISTER']);
         }
 
-        return jwt.sign(payload, jwt_secret, { expiresIn });
+        return jwt.sign(payload, this.privateKey, { expiresIn });
     }
 }
 
 @Injectable()
 export class MobileTokenService implements TokenService {
-    constructor(private readonly logger: LoggerService, private readonly config: ConfigService) {
+
+    private readonly privateKey: string;
+
+    constructor(
+        private readonly logger: LoggerService,
+        private readonly config: ConfigService,
+        private readonly keyService: KeyService
+    ) {
         this.logger.setContext(MobileTokenService.name);
+        this.privateKey = this.keyService.getPrivateKey();
     }
 
     /**
@@ -107,15 +136,14 @@ export class MobileTokenService implements TokenService {
      * @returns mobile token.
      */
     createToken(iss: string, sub: string, aud: string, mobile: string): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET');
         const expiresIn = this.config.get<string>('EX_REGISTER');
         const payload = { iss, sub, aud, mobile };
 
-        if (!jwt_secret || !expiresIn) {
-            throw new EnvUndefinedError(['JWT_SECRET', 'EX_REGISTER']);
+        if (!expiresIn) {
+            throw new EnvUndefinedError(['EX_REGISTER']);
         }
 
-        return jwt.sign(payload, jwt_secret, { expiresIn });
+        return jwt.sign(payload, this.privateKey, { expiresIn });
     }
 
     /**
@@ -127,13 +155,13 @@ export class MobileTokenService implements TokenService {
      * @param mobile - mobile
      * @returns mobile token.
      */
-    createVerifyToken(iss: string, sub: string, aud: string, mobile: string, ranNum: number): string {
-        const jwt_secret = this.config.get<string>('JWT_SECRET') + ranNum.toString();
+    createVerifyToken(iss: string, sub: string, aud: string, mobile: string, ranNum: string): string {
+        const jwt_secret = this.config.get<string>('JWT_MOBILE_SECRET') + ranNum;
         const expiresIn = this.config.get<string>('EX_MOBILE_VERIFY');
         const payload = { iss, sub, aud, mobile };
 
         if (!jwt_secret || !expiresIn) {
-            throw new EnvUndefinedError(['JWT_SECRET', 'EX_MOBILE_VERIFY']);
+            throw new EnvUndefinedError(['JWT_MOBILE_SECRET', 'EX_MOBILE_VERIFY']);
         }
 
         return jwt.sign(payload, jwt_secret, { expiresIn });

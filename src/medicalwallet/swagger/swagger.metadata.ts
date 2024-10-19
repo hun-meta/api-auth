@@ -1,7 +1,7 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/types/http.type';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
 import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
-import { CHECKED } from '../types';
+import { CHECKED, SENT_CODE } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
 
 export const checkAccountOpts = createSwaggerOptions({
@@ -13,7 +13,7 @@ export const checkAccountOpts = createSwaggerOptions({
             type: 'object',
             properties: {
                 account: {
-                    type: 'string',
+                    type: 'boolean',
                     description: 'The login account for user',
                     example: 'testaccount',
                 },
@@ -25,7 +25,7 @@ export const checkAccountOpts = createSwaggerOptions({
         {
             status: 200,
             description: 'request success, account available',
-            schema: { example: createBody(CHECKED, { available: true }) },
+            schema: { example: createBody(CHECKED, { available: true, accountToken: '<jwt token value>' }) },
         },
         {
             status: 400,
@@ -55,5 +55,50 @@ export const checkAccountOpts = createSwaggerOptions({
                 }),
             },
         },
+    ],
+});
+
+export const sendCodeOpts = createSwaggerOptions({
+    summary: 'send mobile verification code for verifying number for registering',
+    body: {
+        description: 'user mobile value',
+        required: true,
+        schema: {
+            type: 'object',
+            properties: {
+                mobile: {
+                    type: 'string',
+                    description: 'The mobile number value',
+                    example: '01034557205',
+                },
+            },
+            required: ['mobile'],
+        },
+    },
+    responses: [
+        {
+            status: 202,
+            description: 'request success, verifivation code sent',
+            schema: { example: createBody(SENT_CODE, { mobileVerifyToken: '<jwt token value>' }) },
+        },
+        {
+            status: 400,
+            description: 'Bad Request',
+            schema: {
+                example: createBody(BAD_REQUEST, {
+                    message:
+                        'Mobile phone number must be 10 or 11 digits long and start with "01".',
+                }),
+            },
+        },
+        {
+            status: 500,
+            description: 'Internal Server Error',
+            schema: {
+                example: createBody(INTERNAL_SERVER_ERROR, {
+                    message: 'Internal server error',
+                }),
+            },
+        }
     ],
 });

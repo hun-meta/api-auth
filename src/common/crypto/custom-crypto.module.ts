@@ -1,18 +1,26 @@
 import { Module } from '@nestjs/common';
 import { AccessTokenService, AccountTokenService, MobileTokenService } from './token.service';
 import { LoggerService } from '../logger/logger.service';
+import { RandomService } from './random.service';
+import { KeyService } from './key.service';
+import { TokenUtilityService } from './token-utility.service';
 
 @Module({
   providers: [
+    KeyService,
+    TokenUtilityService,
     AccessTokenService,
     AccountTokenService,
     MobileTokenService,
-    LoggerService
+    LoggerService,
+    RandomService,
 ],
   exports: [
+    TokenUtilityService,
     AccessTokenService,
     AccountTokenService,
     MobileTokenService,
-],  // 다른 모듈에서 사용할 수 있도록 export
+    RandomService,
+  ]
 })
 export class CustomCryptoModule {}
