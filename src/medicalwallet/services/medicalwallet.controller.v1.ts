@@ -28,7 +28,6 @@ export class MedicalwalletController {
         return response;
     }
 
-    // TODO: Swagger 설정, api 구현
     // Send verify code to Mobile for REGISTER
     @Post('mobile/send-code')
     @CustomSwaggerDecorator(sendCodeOpts)
