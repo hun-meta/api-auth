@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
-import { EnvUndefinedError } from '../exception/errors';
-import { LoggerService } from '../logger/logger.service';
+import { EnvUndefinedError } from '../../exception/errors';
+import { LoggerService } from '../../logger/services/logger.service';
 import { KeyService } from './key.service';
 
 interface TokenService {

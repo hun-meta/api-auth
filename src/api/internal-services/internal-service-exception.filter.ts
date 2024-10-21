@@ -2,7 +2,7 @@ import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
 import { GlobalErrorDto } from 'src/common/exception/dto';
 import { ClsService } from 'nestjs-cls';
-import { LoggerService } from 'src/common/logger/logger.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
 import { BaseResponse } from 'src/common/response/dto/base-response.dto';
 import { ResponseInfo } from 'src/common/response/types';
 import { InternalServiceException } from './exceptions';

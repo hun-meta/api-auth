@@ -1,9 +1,9 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { LoggerService } from '../logger/logger.service';
-import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from './types';
-import { ResponseInfo } from '../response/types';
+import { LoggerService } from '../../logger/services/logger.service';
+import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from '../constants/response-info.constants';
+import { ResponseInfo } from '../../response/types';
 import { KeyService } from './key.service';
 
 @Injectable()

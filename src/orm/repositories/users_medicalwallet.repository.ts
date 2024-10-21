@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UsersMedicalWallet } from '../entities/users_medicalwallet.entity';
-import { AppController } from 'src/app/services/app.controller.v1';
-import { LoggerService } from 'src/common/logger/logger.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
 
 @Injectable()
 export class UsersMWRepository {

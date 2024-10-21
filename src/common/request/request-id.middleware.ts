@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { ClsService } from 'nestjs-cls';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger/services/logger.service';
 
 // INFO:
 // RequestIdMiddleWare는 매 요청마다 고유한 ID를 생성, cls를 통해서 저장한다.

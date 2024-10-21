@@ -1,5 +1,5 @@
 import { IsString, Matches, IsNotEmpty, Validate } from 'class-validator';
-import { IsByteLengthConstraint } from 'src/common/decorator/validator';
+import { IsByteLengthConstraint } from 'src/common/decorator/validator.decorator';
 
 // api-message SendSms Request data DTO
 export class SendSmsDto {

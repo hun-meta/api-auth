@@ -4,11 +4,11 @@ import { CheckAccountResDto, SendCodeResDto } from '../dtos/response.dto';
 import { UsersMWRepository } from 'src/orm/repositories/users_medicalwallet.repository';
 import { TypeORMError } from 'typeorm';
 import { DatabaseException } from 'src/orm/DatabaseException';
-import { LoggerService } from 'src/common/logger/logger.service';
-import { AccountTokenService, MobileTokenService } from 'src/common/crypto/token.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
+import { AccountTokenService, MobileTokenService } from 'src/common/crypto/services/token.service';
 import { ConfigService } from '@nestjs/config';
 import { MessageService } from 'src/api/internal-services/api-message/message.service';
-import { RandomService } from 'src/common/crypto/random.service';
+import { RandomService } from 'src/common/crypto/services/random.service';
 
 @Injectable()
 export class MedicalwalletService {

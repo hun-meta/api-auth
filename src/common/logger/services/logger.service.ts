@@ -12,13 +12,6 @@ export class LoggerService {
         this.context = context;
     }
 
-    // private formatMeta(meta: any): object {
-    //     if (typeof meta === 'object' && meta !== null) {
-    //         return meta;
-    //     }
-    //     return { value: meta };
-    // }
-
     info(message: string) {
         this.logger.info(message, { context: this.context });
     }

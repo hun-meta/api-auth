@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { LoggerService } from "src/common/logger/logger.service";
+import { LoggerService } from "src/common/logger/services/logger.service";
 import { BaseResponse } from "src/common/response/dto/base-response.dto";
 import { SendSmsDto } from "./dtos/request.dto";
 import { SendSmsResDto } from "./dtos/response.dto";

@@ -1,6 +1,6 @@
 # development branch
 # Use the Docker Hub Node.js image as a base image
-FROM node:18.19.1 AS base
+FROM node:18-alpine AS base
 
 FROM base AS deps
 WORKDIR /app

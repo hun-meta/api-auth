@@ -17,12 +17,11 @@ import {
     UNSUPPORTED_MEDIA_TYPE,
 } from './constants/http.response-info.constants';
 import { ClsService } from 'nestjs-cls';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger/services/logger.service';
 import { BaseResponse } from '../response/dto/base-response.dto';
 import { ResponseInfo } from '../response/types';
 import { CustomUndefinedError, CustomUnExpectedError, EnvUndefinedError } from './errors';
 import { UNDEFINED_ERROR, UNEXPECTED_ERROR } from './constants/extra.response-info.constants';
-import { EventListenerTypes } from 'typeorm/metadata/types/EventListenerTypes';
 
 // INFO: 전역 에러 핸들링 필터(http 에러)
 @Catch()
@@ -134,6 +133,7 @@ function handleException(exception: any): Error {
     }
 }
 
+// check it is already handled OR NOT
 function isHandledError(exception: any){
     if(exception instanceof HttpException || exception instanceof EnvUndefinedError){
         return true;

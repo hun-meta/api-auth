@@ -1,13 +1,13 @@
 import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CheckUsePipeDto, DefaultDto, HealthCheckDto } from '../dtos/default.dto';
-import { SUCCESS_RES } from '../types';
+import { SUCCESS_RES } from '../constants/response-info.constants';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
-import { LoggerService } from 'src/common/logger/logger.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
+import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
 import { checkUsePipeOpts, getDefaultResponseOpts, getHealthOpts } from '../swagger/swagger.metadata';
 
 class CheckQueryDto {

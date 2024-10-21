@@ -11,12 +11,11 @@ import { AppController } from './services/app.controller.v1';
 import { AppService } from './services/app.service';
 import { ResponseInterceptor } from 'src/common/response/interceptor/response.interceptor';
 import { GlobalExceptionsFilter } from 'src/common/exception/global-exception.filter';
-import { winstonLogger } from 'src/common/logger/logger.config';
-import { LoggerService } from 'src/common/logger/logger.service';
 import { MedicalwalletModule } from 'src/medicalwallet/medicalwallet.module';
 import { TypeormConfig } from 'src/orm/typeorm.config';
 import { DatabaseExceptionFilter } from 'src/orm/database-exception.filter';
 import { CustomCryptoModule } from 'src/common/crypto/custom-crypto.module';
+import { GlobalLoggerModule } from 'src/common/logger/logger.module';
 
 @Module({
     imports: [
@@ -33,9 +32,10 @@ import { CustomCryptoModule } from 'src/common/crypto/custom-crypto.module';
             inject: [ConfigService],
             useFactory: TypeormConfig,
         }),
+        // winstonLogger,
+        GlobalLoggerModule,
         CustomCryptoModule,
         MedicalwalletModule,
-        winstonLogger,
     ],
     controllers: [AppController],
     providers: [
@@ -51,10 +51,9 @@ import { CustomCryptoModule } from 'src/common/crypto/custom-crypto.module';
             provide: APP_INTERCEPTOR,
             useClass: ResponseInterceptor,
         },
-        LoggerService,
         AppService
     ],
-    exports: [LoggerService],
+    exports: [],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {

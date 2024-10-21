@@ -4,8 +4,8 @@ import { CheckAccountDto, RegisterDTO, SendCodeDto } from '../dtos/request.dto';
 import { CheckAccountResDto, RegisterResDTO, SendCodeResDto } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { CHECKED, REGISTERED, SENT_CODE } from '../constants/response-info.constants';
-import { LoggerService } from 'src/common/logger/logger.service';
-import { CustomSwaggerDecorator } from 'src/common/swagger/swagger.decorator';
+import { LoggerService } from 'src/common/logger/services/logger.service';
+import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
 import { checkAccountOpts, sendCodeOpts } from '../swagger/swagger.metadata';
 
 @Controller('v1/medicalwallet/')

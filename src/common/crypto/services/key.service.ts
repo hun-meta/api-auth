@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../../logger/services/logger.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { EnvUndefinedError } from '../exception/errors';
+import { EnvUndefinedError } from '../../exception/errors';
 
 @Injectable()
 export class KeyService {

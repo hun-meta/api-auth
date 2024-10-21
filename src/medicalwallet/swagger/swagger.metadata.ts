@@ -1,6 +1,6 @@
 // swagger.metadata.ts
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
-import { createBody, createSwaggerOptions } from '../../common/swagger/swagger.decorator';
+import { createBody, createSwaggerOptions } from '../../common/decorator/swagger.decorator';
 import { CHECKED, SENT_CODE } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
 

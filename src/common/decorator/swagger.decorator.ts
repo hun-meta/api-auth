@@ -14,6 +14,7 @@ import {
     ApiParamOptions,
     ApiBodyOptions,
     ApiHeaderOptions,
+    ApiBearerAuth,
 } from '@nestjs/swagger';
 import { ResponseInfo } from '../response/types';
 
@@ -28,6 +29,7 @@ export interface SwaggerOptions {
     headers?: ApiHeaderOptions[];
     consumes?: string[];
     produces?: string[];
+    bearerAuth?: boolean;
 }
 
 // INFO: Swagger schema Creater for ApiResponseOptions
@@ -56,6 +58,7 @@ export function CustomSwaggerDecorator(options: SwaggerOptions) {
         ...(options.headers ? options.headers.map((header) => ApiHeader(header)) : []),
         ...(options.consumes ? [ApiConsumes(...options.consumes)] : []),
         ...(options.produces ? [ApiProduces(...options.produces)] : []),
+        ...(options.bearerAuth ? [ApiBearerAuth()] : []),  // Add ApiBearerAuth if bearerAuth is true
     ];
     return applyDecorators(...decorators);
 }

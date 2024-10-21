@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AccessTokenService, AccountTokenService, MobileTokenService } from './token.service';
-import { LoggerService } from '../logger/logger.service';
-import { RandomService } from './random.service';
-import { KeyService } from './key.service';
-import { TokenUtilityService } from './token-utility.service';
+import { AccessTokenService, AccountTokenService, MobileTokenService } from './services/token.service';
+import { RandomService } from './services/random.service';
+import { KeyService } from './services/key.service';
+import { TokenUtilityService } from './services/token-utility.service';
 
 @Module({
   providers: [
@@ -12,7 +11,6 @@ import { TokenUtilityService } from './token-utility.service';
     AccessTokenService,
     AccountTokenService,
     MobileTokenService,
-    LoggerService,
     RandomService,
 ],
   exports: [

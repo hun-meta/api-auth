@@ -31,6 +31,7 @@ async function bootstrap() {
         .setTitle('API 문서')
         .setDescription('API 설명서입니다.')
         .setVersion('1.0')
+        .addBearerAuth()
         .addTag('API')
         .build();
 
