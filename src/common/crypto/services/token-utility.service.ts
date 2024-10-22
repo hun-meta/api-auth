@@ -25,17 +25,17 @@ export class TokenUtilityService {
      * @param token - JWT token to be verified
      * @returns ResponseInfo if verification is successful
      */
-    verifyToken(token: string): ResponseInfo {
+    verifyToken(token: string): [ResponseInfo, any] {
         try {
             const decoded = jwt.verify(token, this.publicKey, { algorithms: ['RS256'] });
-            return JWT_VERIFIED;
+            return [JWT_VERIFIED, decoded];
         } catch (error) {
             if(error instanceof Error){
                 switch(error.name){
                     case 'TokenExpiredError':
-                        return JWT_EXPIRED;
+                        return [JWT_EXPIRED, null];
                     case 'JsonWebTokenError':
-                        return JWT_INVALID;
+                        return [JWT_INVALID, null];
                     default:
                         throw error;
                 }
