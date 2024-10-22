@@ -59,6 +59,10 @@ make delete-development
 ## Env Settings
 - .env
     ```
+    # Project
+    PROJECT=API-Auth
+    PROJECT_BASE_URI=api/auth
+
     # Server Settings
     ABORT_ON_ERROR=false
     NODE_ENV=development # development staging production
