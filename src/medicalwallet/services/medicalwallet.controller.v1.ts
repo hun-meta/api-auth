@@ -1,12 +1,14 @@
-import { Body, Controller, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MedicalwalletService } from './medicalwallet.service';
-import { CheckAccountDto, RegisterDTO, SendCodeDto } from '../dtos/request.dto';
-import { CheckAccountResDto, RegisterResDTO, SendCodeResDto } from '../dtos/response.dto';
+import { CheckAccountDto, RegisterDTO, SendCodeDto, VerifyCodeDto } from '../dtos/request.dto';
+import { CheckAccountResDto, RegisterResDTO, SendCodeResDto, VerifyCodeResDto } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
-import { CHECKED, REGISTERED, SENT_CODE } from '../constants/response-info.constants';
+import { CHECKED, REGISTERED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { LoggerService } from 'src/common/logger/services/logger.service';
 import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
-import { checkAccountOpts, sendCodeOpts } from '../swagger/swagger.metadata';
+import { checkAccountOpts, sendCodeOpts, verifyCodeOpts } from '../swagger/swagger.metadata';
+import { RegisterGuard } from 'src/common/request/register.guard';
+import { MobileGuard } from 'src/common/request/mobile.guard';
 
 @Controller('v1/medicalwallet/')
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -38,10 +40,22 @@ export class MedicalwalletController {
         return response;
     }
 
-    // TODO: Swagger 설정
-    // 회원 가입
+    // Verify Mobile owner by token and verification code
+    @Post('mobile/verification')
+    @UseGuards(MobileGuard)
+    @CustomSwaggerDecorator(verifyCodeOpts)
+    verifyCode(@Body() verifyCodeDto: VerifyCodeDto): ControllerResponse<VerifyCodeResDto> {
+        const verifyCodeResDto = this.medicalwalletService.getMobileToken(verifyCodeDto);
+        const response = ControllerResponse.create<VerifyCodeResDto>(VERIFIED, verifyCodeResDto);
+
+        return response;
+    }
+
+    // TODO: set Swagger options & implement business logic
+    // Register Medical Wallet user
     @Post('users')
-    register(@Body() registerDto: RegisterDTO): ControllerResponse<RegisterResDTO> {
+    @UseGuards(RegisterGuard)
+    async register(@Body() registerDto: RegisterDTO): Promise<ControllerResponse<RegisterResDTO>> {
         this.logger.debug('/users: ', registerDto);
 
         const registerResDto = RegisterResDTO.create('', '');

@@ -1,7 +1,7 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constants/http.response-info.constants';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'src/common/exception/constants/http.response-info.constants';
 import { createBody, createSwaggerOptions } from '../../common/decorator/swagger.decorator';
-import { CHECKED, SENT_CODE } from '../constants/response-info.constants';
+import { CHECKED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
 
 export const checkAccountOpts = createSwaggerOptions({
@@ -69,7 +69,7 @@ export const sendCodeOpts = createSwaggerOptions({
                 mobile: {
                     type: 'string',
                     description: 'The mobile number value',
-                    example: '01034557205',
+                    example: '01012345678',
                 },
             },
             required: ['mobile'],
@@ -79,7 +79,7 @@ export const sendCodeOpts = createSwaggerOptions({
         {
             status: 202,
             description: 'request success, verifivation code sent',
-            schema: { example: createBody(SENT_CODE, { mobileVerifyToken: '<jwt token value>' }) },
+            schema: { example: createBody(SENT_CODE, { mobileVerificationToken: '<jwt token value>' }) },
         },
         {
             status: 400,
@@ -88,6 +88,77 @@ export const sendCodeOpts = createSwaggerOptions({
                 example: createBody(BAD_REQUEST, {
                     message:
                         'Mobile phone number must be 10 or 11 digits long and start with "01".',
+                }),
+            },
+        },
+        {
+            status: 500,
+            description: 'Internal Server Error',
+            schema: {
+                example: createBody(INTERNAL_SERVER_ERROR, {
+                    message: 'Internal server error',
+                }),
+            },
+        }
+    ],
+});
+
+export const verifyCodeOpts = createSwaggerOptions({
+    summary: 'Verify the code for mobile phone number authentication and issue a mobile token for user registration',
+    headers: [
+        {
+            name: 'MOBILE-VERIFICATION-TOKEN',
+            description: 'mobile verification token to verify mobile number',
+            required: true,
+            schema: {
+                type: 'string',
+                example: 'Bearer value',
+            },
+        },
+    ],
+    body: {
+        description: 'mobile number to verify & verification code',
+        required: true,
+        schema: {
+            type: 'object',
+            properties: {
+                mobile: {
+                    type: 'string',
+                    description: 'The mobile number value',
+                    example: '01012345678',
+                },
+                verificationCode: {
+                    type: 'number',
+                    description: 'The verification code from phone',
+                    example: 123456,
+                },
+            },
+            required: ['mobile', 'verificationCode'],
+        },
+    },
+    responses: [
+        {
+            status: 200,
+            description: 'request success, mobile number verified',
+            schema: { example: createBody(VERIFIED, { mobileToken: '<jwt token value>' }) },
+        },
+        {
+            status: 400,
+            description: 'Bad Request',
+            schema: {
+                example: createBody(BAD_REQUEST, {
+                    message:
+                        'Mobile phone number must be 10 or 11 digits long and start with "01".',
+                }),
+            },
+        },
+        {
+            status: 401,
+            description: 'Unauthorized',
+            schema: {
+                example: createBody(UNAUTHORIZED, {
+                    message:
+                        'Invalid token',
                 }),
             },
         },

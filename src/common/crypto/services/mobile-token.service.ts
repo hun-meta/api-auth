@@ -47,6 +47,9 @@ export class MobileTokenService extends BaseTokenService {
         const jwt_secret = this.config.get<string>('JWT_MOBILE_SECRET') + ranNum;
         const expiresIn = this.config.get<string>('EX_MOBILE_VERIFY');
         const algorithm = this.config.get<string>('ALGORITHM_MOBILE_VERIFY');
+
+        this.logger.debug('jwt_secret when sign:', jwt_secret);
+        this.logger.debug('algorithm when sign:', algorithm);
         
         if (!jwt_secret || !expiresIn || !algorithm) {
             throw new EnvUndefinedError(['JWT_MOBILE_SECRET', 'EX_MOBILE_VERIFY', 'ALGORITHM_MOBILE_VERIFY']);
@@ -63,11 +66,11 @@ export class MobileTokenService extends BaseTokenService {
      *
      * @param token - JWT token to be verified
      * @param mobile - mobile phone number to verify
-     * @param ranNum - verify code from mobile phone
+     * @param verificationCode - verify code from mobile phone
      * @returns ResponseInfo if verification is successful
      */
-    verifyMobileVerifyToken(token: string, mobile: string, ranNum: number): ResponseInfo {
-        const jwt_secret = this.config.get<string>('JWT_MOBILE_SECRET') + ranNum.toString();
+    verifyMobileVerifyToken(token: string, mobile: string, verificationCode: number): [ResponseInfo, any] {
+        const jwt_secret = this.config.get<string>('JWT_MOBILE_SECRET') + verificationCode.toString();
         const algorithm = this.config.get<string>('ALGORITHM_MOBILE_VERIFY');
 
         if (!jwt_secret || !algorithm) {
@@ -79,16 +82,16 @@ export class MobileTokenService extends BaseTokenService {
         try {
             const decoded = jwt.verify(token, jwt_secret, options);
             if(decoded.mobile !== mobile){
-                return JWT_INVALID;
+                return [JWT_INVALID, null];
             }
-            return JWT_VERIFIED;
+            return [JWT_VERIFIED, decoded];
         } catch (error) {
             if(error instanceof Error){
                 switch(error.name){
                     case 'TokenExpiredError':
-                        return JWT_EXPIRED;
+                        return [JWT_EXPIRED, null];
                     case 'JsonWebTokenError':
-                        return JWT_INVALID;
+                        return [JWT_INVALID, null];
                     default:
                         throw error;
                 }

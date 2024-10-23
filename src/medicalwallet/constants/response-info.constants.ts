@@ -7,6 +7,13 @@ export const CHECKED: ResponseInfo = {
     message: 'Check account Success',
 };
 
+// 휴대폰 인증번호 확인
+export const VERIFIED: ResponseInfo = {
+    status: 200,
+    returnCode: 0,
+    message: 'Mobile number verified'
+}
+
 // 회원 가입 성공
 export const REGISTERED: ResponseInfo = {
     status: 201,

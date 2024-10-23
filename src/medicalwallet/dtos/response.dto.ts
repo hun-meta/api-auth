@@ -18,11 +18,23 @@ export class CheckAccountResDto {
 
 export class SendCodeResDto {
     @IsString()
-    mobileVerifyToken: string; // <jwt token for verify mobile>
+    mobileVerificationToken: string; // <jwt token for verify mobile>
 
-    static create(mobileVerifyToken: string): SendCodeResDto {
+    static create(mobileVerificationToken: string): SendCodeResDto {
         const dto = new SendCodeResDto();
-        dto.mobileVerifyToken = mobileVerifyToken;
+        dto.mobileVerificationToken = mobileVerificationToken;
+
+        return dto;
+    }
+}
+
+export class VerifyCodeResDto {
+    @IsString()
+    mobileToken: string; // return token value if mobile number verification is complete
+
+    static create(mobileToken: string): VerifyCodeResDto {
+        const dto = new VerifyCodeResDto();
+        dto.mobileToken = mobileToken;
 
         return dto;
     }

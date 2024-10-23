@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CheckAccountDto, SendCodeDto } from '../dtos/request.dto';
-import { CheckAccountResDto, SendCodeResDto } from '../dtos/response.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CheckAccountDto, SendCodeDto, VerifyCodeDto } from '../dtos/request.dto';
+import { CheckAccountResDto, SendCodeResDto, VerifyCodeResDto } from '../dtos/response.dto';
 import { UsersMWRepository } from 'src/orm/repositories/users_medicalwallet.repository';
 import { TypeORMError } from 'typeorm';
 import { DatabaseException } from 'src/orm/DatabaseException';
@@ -10,6 +10,7 @@ import { MobileTokenService } from 'src/common/crypto/services/mobile-token.serv
 import { ConfigService } from '@nestjs/config';
 import { MessageService } from 'src/api/internal-services/api-message/message.service';
 import { RandomService } from 'src/common/crypto/services/random.service';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class MedicalwalletService {
@@ -57,14 +58,28 @@ export class MedicalwalletService {
         const code = this.randomService.getRandNum(6);
 
         // 2. create verify token with random code
-        const mobileVerifyToken = this.mobileService.createVerifyToken(issuer, subject, audience, mobile, code);
+        const verificationToken = this.mobileService.createVerifyToken(issuer, subject, audience, mobile, code);
 
         // 3. send code to mobile
         const message = `[${audience}]\n회원가입 인증번호는 [${code}]입니다.`
         const _ = await this.messageService.sendSMS(mobile, message);
 
         // 4. response with verify token
-        const sendCodeResDto = SendCodeResDto.create(mobileVerifyToken);
+        const sendCodeResDto = SendCodeResDto.create(verificationToken);
         return sendCodeResDto;
+    }
+
+    // create & return mobile token for Register
+    getMobileToken(verifyCodeDto: VerifyCodeDto): VerifyCodeResDto {
+        
+        const issuer = this.config.get<string>('ISSUER');
+        const audience = this.config.get<string>('MW').replace('_', ' ');
+        const subject = 'unspecified';
+        const mobile = verifyCodeDto.mobile;
+
+        const mobileToken = this.mobileService.createToken(issuer, subject, audience, mobile);
+        const verifyCodeResDto = VerifyCodeResDto.create(mobileToken);
+
+        return verifyCodeResDto;
     }
 }

@@ -1,4 +1,4 @@
-import { IsString, Matches, IsDateString, IsIn, IsNotEmpty } from 'class-validator';
+import { IsString, Matches, IsDateString, IsIn, IsNotEmpty, IsNumber, Min, Max, IsInt } from 'class-validator';
 
 // 로그인 계정 중복 확인 DTO
 export class CheckAccountDto {
@@ -18,6 +18,23 @@ export class SendCodeDto {
         message: 'Mobile phone number must be 10 or 11 digits long and start with 01.',
     })
     mobile: string; // 10~11자, 01로 시작
+}
+
+// 인증번호 확인 DTO
+export class VerifyCodeDto {
+    @IsNotEmpty()
+    @IsString()
+    @Matches(/^01\d{8,9}$/, {
+        message: 'Mobile phone number must be 10 or 11 digits long and start with 01.',
+    })
+    mobile: string; // 10~11자, 01로 시작
+
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(100000)
+    @Max(999999)
+    @IsInt()
+    verificationCode: number; // 6자리 숫자 코드
 }
 
 // 회원가입 요청 DTO

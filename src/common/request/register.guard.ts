@@ -29,15 +29,15 @@ export class RegisterGuard implements CanActivate {
      * @returns token value
      */
     private extractTokens(request: any): { accountToken: string; mobileToken: string } {
-        const accountTokenValue = request.headers['account-token'];
-        const mobileTokenValue = request.headers['mobile-token'];
+        const accountTokenHeader = request.headers['account-token'];
+        const mobileTokenHeader = request.headers['mobile-token'];
 
-        if (!accountTokenValue || !mobileTokenValue) {
+        if (!accountTokenHeader || !mobileTokenHeader) {
             throw new UnauthorizedException('Token header is missing');
         }
 
-        const accountToken = this.extractBearerToken(accountTokenValue);
-        const mobileToken = this.extractBearerToken(mobileTokenValue);
+        const accountToken = this.extractBearerToken(accountTokenHeader);
+        const mobileToken = this.extractBearerToken(mobileTokenHeader);
 
         if (!accountToken || !mobileToken) {
             throw new UnauthorizedException('Token is Empty');

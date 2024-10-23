@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 
-// 비대칭키 생성 함수
+// asymmetric key creater function
 function generateKeyPair() {
   const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
     modulusLength: 2048,
@@ -15,7 +15,6 @@ function generateKeyPair() {
     }
   });
 
-  // 키를 파일로 저장 (선택사항)
   fs.writeFileSync('public_key.pem', publicKey);
   fs.writeFileSync('private_key.pem', privateKey);
 
