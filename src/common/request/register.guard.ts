@@ -1,18 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, SetMetadata } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { TokenUtilityService } from '../crypto/services/token-utility.service';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JWT_VERIFIED } from '../crypto/constants/response-info.constants';
+import { AccountTokenService } from '../crypto/services/account-token.service';
+import { MobileTokenService } from '../crypto/services/mobile-token.service';
 
 @Injectable()
 export class RegisterGuard implements CanActivate {
-    private readonly apiKey: string;
 
     constructor(
-        private readonly configService: ConfigService,
-        private readonly tokenUtility: TokenUtilityService
-    ) {
-        this.apiKey = this.configService.get<string>('ID_API_KEY');
-    }
+        private readonly accountTokenService: AccountTokenService,
+        private readonly mobileTokenService: MobileTokenService
+    ) {}
 
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
@@ -50,6 +47,20 @@ export class RegisterGuard implements CanActivate {
     }
 
     /**
+     * Extract token value from Bearer format
+     *
+     * @param token - Bearer token header value
+     * @returns token value
+     */
+    private extractBearerToken(token: string): string {
+        if (token.startsWith('Bearer ')) {
+            return token.slice(7);
+        } else {
+            throw new UnauthorizedException(`Invalid token format`);
+        }
+    }
+
+    /**
      * Verify both account and mobile tokens
      * 
      * @param accountToken - account token value
@@ -57,8 +68,8 @@ export class RegisterGuard implements CanActivate {
      * @returns token payloads
      */
     private verifyTokens(accountToken: string, mobileToken: string): [any, any] {
-        const [accountResult, accountPayload] = this.tokenUtility.verifyToken(accountToken);
-        const [mobileResult, mobilePayload] = this.tokenUtility.verifyToken(mobileToken);
+        const [accountResult, accountPayload] = this.accountTokenService.verifyToken(accountToken);
+        const [mobileResult, mobilePayload] = this.mobileTokenService.verifyToken(mobileToken);
 
         if (accountResult !== JWT_VERIFIED || mobileResult !== JWT_VERIFIED) {
             throw new UnauthorizedException('Invalid token');
@@ -83,17 +94,4 @@ export class RegisterGuard implements CanActivate {
         }
     }
 
-    /**
-     * Extract token value from Bearer format
-     *
-     * @param token - Bearer token header value
-     * @returns token value
-     */
-    private extractBearerToken(token: string): string {
-        if (token.startsWith('Bearer ')) {
-            return token.slice(7);
-        } else {
-            throw new UnauthorizedException(`Invalid token format`);
-        }
-    }
 }

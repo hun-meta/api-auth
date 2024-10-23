@@ -1,3 +1,4 @@
+// 대칭키 생성
 const crypto = require('crypto');
 const secret = crypto.randomBytes(32).toString('hex');
 
