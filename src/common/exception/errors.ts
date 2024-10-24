@@ -1,6 +1,6 @@
 // General 9000~9999
 
-import { BASE_EXCEPTION } from "./constants/exception-name.constants";
+import { BASE_EXCEPTION } from './constants/exception-name.constants';
 
 // Any Error instances that I didn't Expected. (Must handle it after Error occured)
 export class CustomUnExpectedError extends Error {

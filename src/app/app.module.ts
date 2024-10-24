@@ -51,7 +51,7 @@ import { GlobalLoggerModule } from 'src/common/logger/logger.module';
             provide: APP_INTERCEPTOR,
             useClass: ResponseInterceptor,
         },
-        AppService
+        AppService,
     ],
     exports: [],
 })

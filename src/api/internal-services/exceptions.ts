@@ -1,6 +1,5 @@
 // Base Exception for Internal Service
 export class InternalServiceException extends Error {
-
     public readonly status: number;
     public readonly requestId: string;
 

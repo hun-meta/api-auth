@@ -1,15 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { BaseTokenService } from "./base-token.service";
-import { LoggerService } from "src/common/logger/services/logger.service";
-import { ConfigService } from "@nestjs/config";
-import { KeyService } from "./key.service";
+import { Injectable } from '@nestjs/common';
+import { BaseTokenService } from './base-token.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
+import { ConfigService } from '@nestjs/config';
+import { KeyService } from './key.service';
 
 @Injectable()
 export class RefreshTokenService extends BaseTokenService {
     constructor(
         protected readonly logger: LoggerService,
         protected readonly config: ConfigService,
-        protected readonly keyService: KeyService
+        protected readonly keyService: KeyService,
     ) {
         super('EX_REFRESH', 'ALGORITHM_REFRESH');
         this.setDependencies(this.logger, this.config, this.keyService);

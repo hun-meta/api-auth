@@ -1,5 +1,9 @@
 // swagger.metadata.ts
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'src/common/exception/constants/http.response-info.constants';
+import {
+    BAD_REQUEST,
+    INTERNAL_SERVER_ERROR,
+    UNAUTHORIZED,
+} from 'src/common/exception/constants/http.response-info.constants';
 import { createBody, createSwaggerOptions } from '../../common/decorator/swagger.decorator';
 import { CHECKED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
@@ -86,8 +90,7 @@ export const SEND_CODE_OPTS = createSwaggerOptions({
             description: 'Bad Request',
             schema: {
                 example: createBody(BAD_REQUEST, {
-                    message:
-                        'Mobile phone number must be 10 or 11 digits long and start with "01".',
+                    message: 'Mobile phone number must be 10 or 11 digits long and start with "01".',
                 }),
             },
         },
@@ -99,7 +102,7 @@ export const SEND_CODE_OPTS = createSwaggerOptions({
                     message: 'Internal server error',
                 }),
             },
-        }
+        },
     ],
 });
 
@@ -147,8 +150,7 @@ export const VERIFY_CODE_OPTS = createSwaggerOptions({
             description: 'Bad Request',
             schema: {
                 example: createBody(BAD_REQUEST, {
-                    message:
-                        'Mobile phone number must be 10 or 11 digits long and start with "01".',
+                    message: 'Mobile phone number must be 10 or 11 digits long and start with "01".',
                 }),
             },
         },
@@ -157,8 +159,7 @@ export const VERIFY_CODE_OPTS = createSwaggerOptions({
             description: 'Unauthorized',
             schema: {
                 example: createBody(UNAUTHORIZED, {
-                    message:
-                        'Invalid token',
+                    message: 'Invalid token',
                 }),
             },
         },
@@ -170,6 +171,6 @@ export const VERIFY_CODE_OPTS = createSwaggerOptions({
                     message: 'Internal server error',
                 }),
             },
-        }
+        },
     ],
 });

@@ -1,15 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { BaseTokenService } from "./base-token.service";
-import { ConfigService } from "@nestjs/config";
-import { KeyService } from "./key.service";
-import { LoggerService } from "src/common/logger/services/logger.service";
+import { Injectable } from '@nestjs/common';
+import { BaseTokenService } from './base-token.service';
+import { ConfigService } from '@nestjs/config';
+import { KeyService } from './key.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
 
 @Injectable()
 export class AccessTokenService extends BaseTokenService {
     constructor(
         protected readonly logger: LoggerService,
         protected readonly config: ConfigService,
-        protected readonly keyService: KeyService
+        protected readonly keyService: KeyService,
     ) {
         super('EX_ACCESS', 'ALGORITHM_ACCESS');
         this.setDependencies(this.logger, this.config, this.keyService);

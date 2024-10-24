@@ -58,7 +58,7 @@ export function CustomSwaggerDecorator(options: SwaggerOptions) {
         ...(options.headers ? options.headers.map((header) => ApiHeader(header)) : []),
         ...(options.consumes ? [ApiConsumes(...options.consumes)] : []),
         ...(options.produces ? [ApiProduces(...options.produces)] : []),
-        ...(options.bearerAuth ? [ApiBearerAuth()] : []),  // Add ApiBearerAuth if bearerAuth is true
+        ...(options.bearerAuth ? [ApiBearerAuth()] : []), // Add ApiBearerAuth if bearerAuth is true
     ];
     return applyDecorators(...decorators);
 }

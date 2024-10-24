@@ -11,8 +11,8 @@ export const CHECKED: ResponseInfo = {
 export const VERIFIED: ResponseInfo = {
     status: 200,
     returnCode: 0,
-    message: 'Mobile number verified'
-}
+    message: 'Mobile number verified',
+};
 
 // 회원 가입 성공
 export const REGISTERED: ResponseInfo = {
@@ -26,4 +26,4 @@ export const SENT_CODE: ResponseInfo = {
     status: 202,
     returnCode: 0,
     message: 'Sending message Success',
-}
+};

@@ -36,7 +36,7 @@ export class MedicalwalletController {
     async sendCode(@Body() sendCodeDto: SendCodeDTO): Promise<ControllerResponse<SendCodeResDTO>> {
         const sendCodeResDto = await this.medicalwalletService.sendMobileCode(sendCodeDto);
         const response = ControllerResponse.create<SendCodeResDTO>(SENT_CODE, sendCodeResDto);
-    
+
         return response;
     }
 
@@ -58,8 +58,8 @@ export class MedicalwalletController {
     // @CustomSwaggerDecorator(registerOpts)
     async register(@Body() registerDto: RegisterDTO): Promise<ControllerResponse<RegisterResDTO>> {
         this.logger.debug('/users: ', registerDto);
-
-        const registerResDto = RegisterResDTO.create('', '');
+        const registerResDto = await this.medicalwalletService.register(registerDto);
+        // const registerResDto = RegisterResDTO.create('', '');
         return ControllerResponse.create<RegisterResDTO>(REGISTERED, registerResDto);
     }
 }

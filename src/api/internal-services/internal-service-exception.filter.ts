@@ -50,19 +50,18 @@ export class InternalServiceExceptionFilter implements ExceptionFilter {
  * @param exception - Internal Micro Service Exception
  * @returns response information, error message
  */
-function getExceptionInfo(exception: InternalServiceException): [ResponseInfo, string]{
-
+function getExceptionInfo(exception: InternalServiceException): [ResponseInfo, string] {
     let message = 'exception is not defined';
     let info = INTERNAL_SERVER_ERROR;
 
     // check if it's not a null, undefined value
-    if(exception === null || exception === undefined){
+    if (exception === null || exception === undefined) {
         return [info, message];
     }
 
     const exceptionName = getExceptionName(exception);
 
-    switch(exceptionName){
+    switch (exceptionName) {
         case INTERNAL_SERVICE_EXCEPTION.API_MESSAGE:
             [info, message] = getMessageExceptionInfo(exception);
             break;
@@ -82,9 +81,9 @@ function getExceptionInfo(exception: InternalServiceException): [ResponseInfo, s
  * @returns Exception Name
  */
 function getExceptionName(exception: InternalServiceException): string {
-    if(exception instanceof ApiMessageException){
+    if (exception instanceof ApiMessageException) {
         return INTERNAL_SERVICE_EXCEPTION.API_MESSAGE;
-    }else{
+    } else {
         return INTERNAL_SERVICE_EXCEPTION.UNDEFINED;
     }
 }
@@ -95,16 +94,16 @@ function getExceptionName(exception: InternalServiceException): string {
  * @param exception - Internal Micro Service Exception(ApiMessageException)
  * @returns response information, error message
  */
-function getMessageExceptionInfo(exception: InternalServiceException): [ResponseInfo, string]{
+function getMessageExceptionInfo(exception: InternalServiceException): [ResponseInfo, string] {
     const messageException = exception as ApiMessageException;
     let info = MESSAGE_SERVICE_ERROR;
     let errMessage = 'message service error';
 
-    switch(messageException.status){
+    switch (messageException.status) {
         default:
             info = MESSAGE_SERVICE_ERROR;
             break;
     }
-    
+
     return [info, errMessage];
 }

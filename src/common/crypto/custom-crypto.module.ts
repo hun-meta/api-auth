@@ -7,18 +7,7 @@ import { MobileTokenService } from './services/mobile-token.service';
 
 @Global()
 @Module({
-  providers: [
-    KeyService,
-    AccessTokenService,
-    AccountTokenService,
-    MobileTokenService,
-    RandomService,
-],
-  exports: [
-    AccessTokenService,
-    AccountTokenService,
-    MobileTokenService,
-    RandomService,
-  ]
+    providers: [KeyService, AccessTokenService, AccountTokenService, MobileTokenService, RandomService],
+    exports: [AccessTokenService, AccountTokenService, MobileTokenService, RandomService],
 })
 export class CustomCryptoModule {}

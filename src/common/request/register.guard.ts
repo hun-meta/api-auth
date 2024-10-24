@@ -5,18 +5,17 @@ import { MobileTokenService } from '../crypto/services/mobile-token.service';
 
 @Injectable()
 export class RegisterGuard implements CanActivate {
-
     constructor(
         private readonly accountTokenService: AccountTokenService,
-        private readonly mobileTokenService: MobileTokenService
+        private readonly mobileTokenService: MobileTokenService,
     ) {}
 
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
         const { accountToken, mobileToken } = this.extractTokens(request);
-        
+
         const [accountPayload, mobilePayload] = this.verifyTokens(accountToken, mobileToken);
-        
+
         this.validateTokenPayloads(accountPayload, mobilePayload, request.body);
 
         return true;
@@ -62,7 +61,7 @@ export class RegisterGuard implements CanActivate {
 
     /**
      * Verify both account and mobile tokens
-     * 
+     *
      * @param accountToken - account token value
      * @param mobileToken - mobile token value
      * @returns token payloads
@@ -80,7 +79,7 @@ export class RegisterGuard implements CanActivate {
 
     /**
      * Validate token payloads against request body
-     * 
+     *
      * @param accountPayload - account token payload
      * @param mobilePayload - mobile token payload
      * @param body - http request body to compare
@@ -93,5 +92,4 @@ export class RegisterGuard implements CanActivate {
             throw new UnauthorizedException('Invalid token');
         }
     }
-
 }

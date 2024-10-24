@@ -1,19 +1,19 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { BaseTokenService } from "./base-token.service";
-import { LoggerService } from "src/common/logger/services/logger.service";
-import { ConfigService } from "@nestjs/config";
-import { KeyService } from "./key.service";
-import { EnvUndefinedError } from "src/common/exception/errors";
-import { ResponseInfo } from "src/common/response/types";
-import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from "../constants/response-info.constants";
+import { BaseTokenService } from './base-token.service';
+import { LoggerService } from 'src/common/logger/services/logger.service';
+import { ConfigService } from '@nestjs/config';
+import { KeyService } from './key.service';
+import { EnvUndefinedError } from 'src/common/exception/errors';
+import { ResponseInfo } from 'src/common/response/types';
+import { JWT_EXPIRED, JWT_INVALID, JWT_VERIFIED } from '../constants/response-info.constants';
 
 @Injectable()
 export class MobileTokenService extends BaseTokenService {
     constructor(
         protected readonly logger: LoggerService,
         protected readonly config: ConfigService,
-        protected readonly keyService: KeyService
+        protected readonly keyService: KeyService,
     ) {
         super('EX_REGISTER', 'ALGORITHM_REGISTER');
         this.setDependencies(this.logger, this.config, this.keyService);
@@ -50,7 +50,7 @@ export class MobileTokenService extends BaseTokenService {
 
         this.logger.debug('jwt_secret when sign:', jwt_secret);
         this.logger.debug('algorithm when sign:', algorithm);
-        
+
         if (!jwt_secret || !expiresIn || !algorithm) {
             throw new EnvUndefinedError(['JWT_MOBILE_SECRET', 'EX_MOBILE_VERIFY', 'ALGORITHM_MOBILE_VERIFY']);
         }
@@ -77,17 +77,17 @@ export class MobileTokenService extends BaseTokenService {
             throw new EnvUndefinedError(['JWT_MOBILE_SECRET', 'ALGORITHM_MOBILE_VERIFY']);
         }
 
-        const options = { algorithms: [ algorithm ] };
+        const options = { algorithms: [algorithm] };
 
         try {
             const decoded = jwt.verify(token, jwt_secret, options);
-            if(decoded.mobile !== mobile){
+            if (decoded.mobile !== mobile) {
                 return [JWT_INVALID, null];
             }
             return [JWT_VERIFIED, decoded];
         } catch (error) {
-            if(error instanceof Error){
-                switch(error.name){
+            if (error instanceof Error) {
+                switch (error.name) {
                     case 'TokenExpiredError':
                         return [JWT_EXPIRED, null];
                     case 'JsonWebTokenError':

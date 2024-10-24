@@ -5,10 +5,9 @@ import { LoggerService } from '../logger/services/logger.service';
 
 @Injectable()
 export class MobileGuard implements CanActivate {
-
     constructor(
         private readonly logger: LoggerService,
-        private readonly mobileTokenService: MobileTokenService
+        private readonly mobileTokenService: MobileTokenService,
     ) {
         this.logger.setContext(MobileGuard.name);
     }
@@ -16,12 +15,12 @@ export class MobileGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
         const verificationToken = this.extractTokens(request);
-        
+
         const body = request.body;
         const mobile = body.mobile;
         const verificationCode = body.verificationCode;
         const payload = this.verifyToken(verificationToken, mobile, verificationCode);
-        
+
         this.validateTokenPayload(payload, body);
 
         return true;
@@ -65,12 +64,16 @@ export class MobileGuard implements CanActivate {
 
     /**
      * Verify mobile verification token
-     * 
+     *
      * @param verificationToken - mobile verification token value
      * @returns token payload
      */
     private verifyToken(verificationToken: string, mobile: string, verificationCode: number): [any, any] {
-        const [result, payload] = this.mobileTokenService.verifyMobileVerifyToken(verificationToken, mobile, verificationCode);
+        const [result, payload] = this.mobileTokenService.verifyMobileVerifyToken(
+            verificationToken,
+            mobile,
+            verificationCode,
+        );
 
         if (result !== JWT_VERIFIED) {
             throw new UnauthorizedException('Invalid token');
@@ -81,7 +84,7 @@ export class MobileGuard implements CanActivate {
 
     /**
      * Validate token payload against request body
-     * 
+     *
      * @param payload - mobile verification token payload
      * @param body - http request body to compare
      */
@@ -92,5 +95,4 @@ export class MobileGuard implements CanActivate {
             throw new UnauthorizedException('Invalid token');
         }
     }
-
 }

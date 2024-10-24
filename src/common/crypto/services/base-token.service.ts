@@ -19,10 +19,10 @@ export abstract class BaseTokenService implements TokenService {
     protected logger: LoggerService;
     protected config: ConfigService;
     protected keyService: KeyService;
-    
+
     constructor(
         protected readonly expiresInKey: string,
-        protected readonly algorithmKey: string
+        protected readonly algorithmKey: string,
     ) {}
 
     protected setDependencies(logger: LoggerService, config: ConfigService, keyService: KeyService) {

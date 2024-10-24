@@ -1,7 +1,7 @@
 // 20000~ Internal Service Error code
 // 21000~ API-Message Service Error code
 
-import { ResponseInfo } from "src/common/response/types";
+import { ResponseInfo } from 'src/common/response/types';
 
 // Unspecified Internal Service Error
 export const INTERNAL_SERVICE_ERROR: ResponseInfo = {

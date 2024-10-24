@@ -134,10 +134,10 @@ function handleException(exception: any): Error {
 }
 
 // check it is already handled OR NOT
-function isHandledError(exception: any){
-    if(exception instanceof HttpException || exception instanceof EnvUndefinedError){
+function isHandledError(exception: any) {
+    if (exception instanceof HttpException || exception instanceof EnvUndefinedError) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
