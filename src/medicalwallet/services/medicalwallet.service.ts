@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CheckAccountDto, SendCodeDto, VerifyCodeDto } from '../dtos/request.dto';
-import { CheckAccountResDto, SendCodeResDto, VerifyCodeResDto } from '../dtos/response.dto';
+import { Injectable } from '@nestjs/common';
+import { CheckAccountDTO, SendCodeDTO, VerifyCodeDTO } from '../dtos/request.dto';
+import { CheckAccountResDTO, SendCodeResDTO, VerifyCodeResDTO } from '../dtos/response.dto';
 import { UsersMWRepository } from 'src/orm/repositories/users_medicalwallet.repository';
 import { TypeORMError } from 'typeorm';
 import { DatabaseException } from 'src/orm/DatabaseException';
@@ -10,7 +10,6 @@ import { MobileTokenService } from 'src/common/crypto/services/mobile-token.serv
 import { ConfigService } from '@nestjs/config';
 import { MessageService } from 'src/api/internal-services/api-message/message.service';
 import { RandomService } from 'src/common/crypto/services/random.service';
-import { validate } from 'class-validator';
 
 @Injectable()
 export class MedicalwalletService {
@@ -27,7 +26,7 @@ export class MedicalwalletService {
     }
 
     // Check Medical-Wallet login account for Register
-    async checkAccount(checkAccountDto: CheckAccountDto): Promise<CheckAccountResDto> {
+    async checkAccount(checkAccountDto: CheckAccountDTO): Promise<CheckAccountResDTO> {
         try {
             let available: boolean = false;
             let accountToken: string = '';
@@ -38,7 +37,7 @@ export class MedicalwalletService {
                 accountToken = this.accountService.createToken(this.config.get<string>('ISSUER'), 'unspecified', this.config.get<string>('MW'), checkAccountDto.account);
             }
 
-            return CheckAccountResDto.create(available, accountToken);
+            return CheckAccountResDTO.create(available, accountToken);
         } catch (error) {
             if (error instanceof TypeORMError) {
                 throw new DatabaseException(error);
@@ -48,7 +47,7 @@ export class MedicalwalletService {
     }
 
     // Send verify Code to mobile & create verifyToken for Register
-    async sendMobileCode(sendCodeDto: SendCodeDto): Promise<SendCodeResDto> {
+    async sendMobileCode(sendCodeDto: SendCodeDTO): Promise<SendCodeResDTO> {
 
         // 1. create random code
         const issuer = this.config.get<string>('ISSUER');
@@ -65,12 +64,12 @@ export class MedicalwalletService {
         const _ = await this.messageService.sendSMS(mobile, message);
 
         // 4. response with verify token
-        const sendCodeResDto = SendCodeResDto.create(verificationToken);
+        const sendCodeResDto = SendCodeResDTO.create(verificationToken);
         return sendCodeResDto;
     }
 
     // create & return mobile token for Register
-    getMobileToken(verifyCodeDto: VerifyCodeDto): VerifyCodeResDto {
+    getMobileToken(verifyCodeDto: VerifyCodeDTO): VerifyCodeResDTO {
         
         const issuer = this.config.get<string>('ISSUER');
         const audience = this.config.get<string>('MW').replace('_', ' ');
@@ -78,7 +77,7 @@ export class MedicalwalletService {
         const mobile = verifyCodeDto.mobile;
 
         const mobileToken = this.mobileService.createToken(issuer, subject, audience, mobile);
-        const verifyCodeResDto = VerifyCodeResDto.create(mobileToken);
+        const verifyCodeResDto = VerifyCodeResDTO.create(mobileToken);
 
         return verifyCodeResDto;
     }

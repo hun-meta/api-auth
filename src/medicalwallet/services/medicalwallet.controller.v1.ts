@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MedicalwalletService } from './medicalwallet.service';
-import { CheckAccountDto, RegisterDTO, SendCodeDto, VerifyCodeDto } from '../dtos/request.dto';
-import { CheckAccountResDto, RegisterResDTO, SendCodeResDto, VerifyCodeResDto } from '../dtos/response.dto';
+import { CheckAccountDTO, RegisterDTO, SendCodeDTO, VerifyCodeDTO } from '../dtos/request.dto';
+import { CheckAccountResDTO, RegisterResDTO, SendCodeResDTO, VerifyCodeResDTO } from '../dtos/response.dto';
 import { ControllerResponse } from 'src/common/response/dto/controller-response.dto';
 import { CHECKED, REGISTERED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { LoggerService } from 'src/common/logger/services/logger.service';
@@ -23,9 +23,9 @@ export class MedicalwalletController {
     // Login ID Duplication Check
     @Post('users/check-account')
     @CustomSwaggerDecorator(CHECK_ACCOUNT_OPTS)
-    async checkAccount(@Body() checkAccountDto: CheckAccountDto): Promise<ControllerResponse<CheckAccountResDto>> {
+    async checkAccount(@Body() checkAccountDto: CheckAccountDTO): Promise<ControllerResponse<CheckAccountResDTO>> {
         const checkAccountResDto = await this.medicalwalletService.checkAccount(checkAccountDto);
-        const response = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
+        const response = ControllerResponse.create<CheckAccountResDTO>(CHECKED, checkAccountResDto);
 
         return response;
     }
@@ -33,9 +33,9 @@ export class MedicalwalletController {
     // Send verify code to Mobile for REGISTER
     @Post('mobile/send-code')
     @CustomSwaggerDecorator(SEND_CODE_OPTS)
-    async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<SendCodeResDto>> {
+    async sendCode(@Body() sendCodeDto: SendCodeDTO): Promise<ControllerResponse<SendCodeResDTO>> {
         const sendCodeResDto = await this.medicalwalletService.sendMobileCode(sendCodeDto);
-        const response = ControllerResponse.create<SendCodeResDto>(SENT_CODE, sendCodeResDto);
+        const response = ControllerResponse.create<SendCodeResDTO>(SENT_CODE, sendCodeResDto);
     
         return response;
     }
@@ -44,9 +44,9 @@ export class MedicalwalletController {
     @Post('mobile/verification')
     @UseGuards(MobileGuard)
     @CustomSwaggerDecorator(VERIFY_CODE_OPTS)
-    verifyCode(@Body() verifyCodeDto: VerifyCodeDto): ControllerResponse<VerifyCodeResDto> {
+    verifyCode(@Body() verifyCodeDto: VerifyCodeDTO): ControllerResponse<VerifyCodeResDTO> {
         const verifyCodeResDto = this.medicalwalletService.getMobileToken(verifyCodeDto);
-        const response = ControllerResponse.create<VerifyCodeResDto>(VERIFIED, verifyCodeResDto);
+        const response = ControllerResponse.create<VerifyCodeResDTO>(VERIFIED, verifyCodeResDto);
 
         return response;
     }

@@ -1,7 +1,7 @@
 import { IsString, Matches, IsDateString, IsIn, IsNotEmpty, IsNumber, Min, Max, IsInt } from 'class-validator';
 
 // 로그인 계정 중복 확인 DTO
-export class CheckAccountDto {
+export class CheckAccountDTO {
     @IsNotEmpty()
     @IsString()
     @Matches(/^[A-Za-z0-9]{6,20}$/, {
@@ -11,7 +11,7 @@ export class CheckAccountDto {
 }
 
 // 휴대폰 인증번호 전송 DTO
-export class SendCodeDto {
+export class SendCodeDTO {
     @IsNotEmpty()
     @IsString()
     @Matches(/^01\d{8,9}$/, {
@@ -21,7 +21,7 @@ export class SendCodeDto {
 }
 
 // 인증번호 확인 DTO
-export class VerifyCodeDto {
+export class VerifyCodeDTO {
     @IsNotEmpty()
     @IsString()
     @Matches(/^01\d{8,9}$/, {

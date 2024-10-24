@@ -1,31 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { CheckUsePipeDto, DefaultDto, HealthCheckDto } from '../dtos/default.dto';
-import { IsNumber } from 'class-validator';
+import { DefaultResDTO, HealthCheckResDTO } from '../dtos/default.dto';
 
 @Injectable()
 export class AppService {
     constructor() {}
 
-    getDefaultResponse(): DefaultDto {
+    getDefaultResponse(): DefaultResDTO {
         const welcomeStr = 'Welcome to API - Auth\n';
         const currentDate = new Date();
         const curDatetime = currentDate.toISOString();
         const responseStr = welcomeStr + curDatetime;
 
-        return DefaultDto.create(responseStr);
+        return DefaultResDTO.create(responseStr);
     }
 
-    getHealth(): HealthCheckDto {
+    getHealth(): HealthCheckResDTO {
         const currentDate = new Date();
         const curDatetime = currentDate.toISOString();
 
-        return HealthCheckDto.create(curDatetime);
-    }
-
-    checkUsePipe(value: any): CheckUsePipeDto {
-        const currentDate = new Date();
-        const curDatetime = currentDate.toISOString();
-
-        return CheckUsePipeDto.create(value);
+        return HealthCheckResDTO.create(curDatetime);
     }
 }

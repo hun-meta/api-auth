@@ -1,44 +1,23 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
-export class DefaultDto {
+export class DefaultResDTO {
     @IsString()
     responseStr: string;
 
-    static create(datetime: string): DefaultDto {
-        const dto = new DefaultDto();
+    static create(datetime: string): DefaultResDTO {
+        const dto = new DefaultResDTO();
         dto.responseStr = datetime;
         return dto;
     }
 }
 
-export class HealthCheckDto {
+export class HealthCheckResDTO {
     @IsString()
     datetime: string;
 
-    static create(datetime: string): HealthCheckDto {
-        const dto = new HealthCheckDto();
+    static create(datetime: string): HealthCheckResDTO {
+        const dto = new HealthCheckResDTO();
         dto.datetime = datetime;
-        return dto;
-    }
-}
-
-export class CheckDto {
-    @IsNumber()
-    param: number;
-
-    static create(param: any): CheckDto {
-        const dto = new CheckDto();
-        dto.param = param;
-        return dto;
-    }
-}
-export class CheckUsePipeDto {
-    @IsNumber()
-    param: number;
-
-    static create(param: any): CheckUsePipeDto {
-        const dto = new CheckDto();
-        dto.param = param;
         return dto;
     }
 }
