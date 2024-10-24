@@ -8,7 +8,7 @@ import { Type } from 'class-transformer';
 import { LoggerService } from 'src/common/logger/services/logger.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
-import { checkUsePipeOpts, getDefaultResponseOpts, getHealthOpts } from '../swagger/swagger.metadata';
+import { CHECK_USEPIPE_OPTS, GET_DEFAUTL_RES_OPTS, GET_HEALTH_OPTS } from '../swagger/swagger.metadata';
 
 class CheckQueryDto {
     @IsNotEmpty()
@@ -38,7 +38,7 @@ export class AppController {
     }
 
     @Get()
-    @CustomSwaggerDecorator(getDefaultResponseOpts)
+    @CustomSwaggerDecorator(GET_DEFAUTL_RES_OPTS)
     async getDefaultResponse(): Promise<ControllerResponse<DefaultDto>> {
         const data = this.appService.getDefaultResponse();
         const response = ControllerResponse.create<DefaultDto>(SUCCESS_RES, data);
@@ -47,7 +47,7 @@ export class AppController {
     }
 
     @Get('v1/health')
-    @CustomSwaggerDecorator(getHealthOpts)
+    @CustomSwaggerDecorator(GET_HEALTH_OPTS)
     getHealth(): ControllerResponse<HealthCheckDto> {
         const data = this.appService.getHealth();
         const response = ControllerResponse.create<HealthCheckDto>(SUCCESS_RES, data);
@@ -56,7 +56,7 @@ export class AppController {
     }
 
     @Get('v1/check')
-    @CustomSwaggerDecorator(checkUsePipeOpts)
+    @CustomSwaggerDecorator(CHECK_USEPIPE_OPTS)
     checkUsePipe(@Query() query: CheckQueryDto): ControllerResponse<CheckUsePipeDto> {
         this.logger.debug('query', query);
 

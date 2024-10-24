@@ -4,7 +4,7 @@ import { createBody, createSwaggerOptions } from '../../common/decorator/swagger
 import { CHECKED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { DB_CONNECTION_ERROR } from 'src/orm/database.type';
 
-export const checkAccountOpts = createSwaggerOptions({
+export const CHECK_ACCOUNT_OPTS = createSwaggerOptions({
     summary: 'check account value is available for registering',
     body: {
         description: 'user login account value',
@@ -58,7 +58,7 @@ export const checkAccountOpts = createSwaggerOptions({
     ],
 });
 
-export const sendCodeOpts = createSwaggerOptions({
+export const SEND_CODE_OPTS = createSwaggerOptions({
     summary: 'send mobile verification code for verifying number for registering',
     body: {
         description: 'user mobile value',
@@ -103,7 +103,7 @@ export const sendCodeOpts = createSwaggerOptions({
     ],
 });
 
-export const verifyCodeOpts = createSwaggerOptions({
+export const VERIFY_CODE_OPTS = createSwaggerOptions({
     summary: 'Verify the code for mobile phone number authentication and issue a mobile token for user registration',
     headers: [
         {

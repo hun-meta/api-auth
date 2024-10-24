@@ -6,7 +6,7 @@ import { ControllerResponse } from 'src/common/response/dto/controller-response.
 import { CHECKED, REGISTERED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { LoggerService } from 'src/common/logger/services/logger.service';
 import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
-import { checkAccountOpts, sendCodeOpts, verifyCodeOpts } from '../swagger/swagger.metadata';
+import { CHECK_ACCOUNT_OPTS, SEND_CODE_OPTS, VERIFY_CODE_OPTS } from '../swagger/swagger.metadata';
 import { RegisterGuard } from 'src/common/request/register.guard';
 import { MobileGuard } from 'src/common/request/mobile.guard';
 
@@ -22,7 +22,7 @@ export class MedicalwalletController {
 
     // Login ID Duplication Check
     @Post('users/check-account')
-    @CustomSwaggerDecorator(checkAccountOpts)
+    @CustomSwaggerDecorator(CHECK_ACCOUNT_OPTS)
     async checkAccount(@Body() checkAccountDto: CheckAccountDto): Promise<ControllerResponse<CheckAccountResDto>> {
         const checkAccountResDto = await this.medicalwalletService.checkAccount(checkAccountDto);
         const response = ControllerResponse.create<CheckAccountResDto>(CHECKED, checkAccountResDto);
@@ -32,7 +32,7 @@ export class MedicalwalletController {
 
     // Send verify code to Mobile for REGISTER
     @Post('mobile/send-code')
-    @CustomSwaggerDecorator(sendCodeOpts)
+    @CustomSwaggerDecorator(SEND_CODE_OPTS)
     async sendCode(@Body() sendCodeDto: SendCodeDto): Promise<ControllerResponse<SendCodeResDto>> {
         const sendCodeResDto = await this.medicalwalletService.sendMobileCode(sendCodeDto);
         const response = ControllerResponse.create<SendCodeResDto>(SENT_CODE, sendCodeResDto);
@@ -43,7 +43,7 @@ export class MedicalwalletController {
     // Verify Mobile owner by token and verification code
     @Post('mobile/verification')
     @UseGuards(MobileGuard)
-    @CustomSwaggerDecorator(verifyCodeOpts)
+    @CustomSwaggerDecorator(VERIFY_CODE_OPTS)
     verifyCode(@Body() verifyCodeDto: VerifyCodeDto): ControllerResponse<VerifyCodeResDto> {
         const verifyCodeResDto = this.medicalwalletService.getMobileToken(verifyCodeDto);
         const response = ControllerResponse.create<VerifyCodeResDto>(VERIFIED, verifyCodeResDto);
@@ -55,6 +55,7 @@ export class MedicalwalletController {
     // Register Medical Wallet user
     @Post('users')
     @UseGuards(RegisterGuard)
+    // @CustomSwaggerDecorator(registerOpts)
     async register(@Body() registerDto: RegisterDTO): Promise<ControllerResponse<RegisterResDTO>> {
         this.logger.debug('/users: ', registerDto);
 

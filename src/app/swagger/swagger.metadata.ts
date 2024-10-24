@@ -3,7 +3,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'src/common/exception/constan
 import { createBody, createSwaggerOptions } from '../../common/decorator/swagger.decorator';
 import { SUCCESS_RES } from '../constants/response-info.constants';
 
-export const getDefaultResponseOpts = createSwaggerOptions({
+export const GET_DEFAUTL_RES_OPTS = createSwaggerOptions({
     summary: 'return datetime, for testing server(Default Path)',
     responses: [
         {
@@ -18,7 +18,7 @@ export const getDefaultResponseOpts = createSwaggerOptions({
     ],
 });
 
-export const getHealthOpts = createSwaggerOptions({
+export const GET_HEALTH_OPTS = createSwaggerOptions({
     summary: 'AWS Health Check Path',
     responses: [
         {
@@ -31,7 +31,7 @@ export const getHealthOpts = createSwaggerOptions({
     ],
 });
 
-export const checkUsePipeOpts = createSwaggerOptions({
+export const CHECK_USEPIPE_OPTS = createSwaggerOptions({
     summary: 'for testing nestJS Decorator',
     queries: [
         {
