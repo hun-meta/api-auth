@@ -98,10 +98,18 @@ make delete-development
     EX_REFRESH=<period> # Refresh token expiration period
     EX_REGISTER=<period> # Tokens(account, mobile) for register expiration period
     EX_MOBILE_VERIFY=3m # Token for verify mobile number
+    ALGORITHM_ACCESS=<algorithm> # algorithm for access token
+    ALGORITHM_REFRESH=<algorithm> # algorithm for refresh token
+    ALGORITHM_REGISTER=<algorithm> # algorithm for register token
+    ALGORITHM_MOBILE_VERIFY=<algorithm> # algorithm for mobile number verification token
 
     # SMS Service
     API_MESSAGE_URL=<url>
     MESSAGE_API_KEY=<create your own key>
+
+    # ID Service
+    API_ID_URL=<url>
+    ID_API_KEY=<create your own key>
     ```
 
 ## Contact
