@@ -6,7 +6,7 @@ import { ControllerResponse } from 'src/common/response/dto/controller-response.
 import { CHECKED, REGISTERED, SENT_CODE, VERIFIED } from '../constants/response-info.constants';
 import { LoggerService } from 'src/common/logger/services/logger.service';
 import { CustomSwaggerDecorator } from 'src/common/decorator/swagger.decorator';
-import { CHECK_ACCOUNT_OPTS, SEND_CODE_OPTS, VERIFY_CODE_OPTS } from '../swagger/swagger.metadata';
+import { CHECK_ACCOUNT_OPTS, REGISTER_OPTS, SEND_CODE_OPTS, VERIFY_CODE_OPTS } from '../swagger/swagger.metadata';
 import { RegisterGuard } from 'src/common/request/register.guard';
 import { MobileGuard } from 'src/common/request/mobile.guard';
 
@@ -55,7 +55,7 @@ export class MedicalwalletController {
     // Register Medical Wallet user
     @Post('users')
     @UseGuards(RegisterGuard)
-    // @CustomSwaggerDecorator(registerOpts)
+    @CustomSwaggerDecorator(REGISTER_OPTS)
     async register(@Body() registerDto: RegisterDTO): Promise<ControllerResponse<RegisterResDTO>> {
         this.logger.debug('/users: ', registerDto);
         const registerResDto = await this.medicalwalletService.register(registerDto);

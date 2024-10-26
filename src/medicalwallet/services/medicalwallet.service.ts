@@ -10,7 +10,6 @@ import { MobileTokenService } from 'src/common/crypto/services/mobile-token.serv
 import { ConfigService } from '@nestjs/config';
 import { MessageService } from 'src/api/internal-services/api-message/message.service';
 import { RandomService } from 'src/common/crypto/services/random.service';
-import { UsersMedicalWallet } from 'src/orm/entities/users_medicalwallet.entity';
 import { IdService } from 'src/api/internal-services/api-id/id.service';
 
 @Injectable()
