@@ -48,9 +48,6 @@ export class MobileTokenService extends BaseTokenService {
         const expiresIn = this.config.get<string>('EX_MOBILE_VERIFY');
         const algorithm = this.config.get<string>('ALGORITHM_MOBILE_VERIFY');
 
-        this.logger.debug('jwt_secret when sign:', jwt_secret);
-        this.logger.debug('algorithm when sign:', algorithm);
-
         if (!jwt_secret || !expiresIn || !algorithm) {
             throw new EnvUndefinedError(['JWT_MOBILE_SECRET', 'EX_MOBILE_VERIFY', 'ALGORITHM_MOBILE_VERIFY']);
         }

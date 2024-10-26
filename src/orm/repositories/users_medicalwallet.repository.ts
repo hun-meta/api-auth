@@ -58,13 +58,19 @@ export class UsersMWRepository extends Repository<UsersMedicalWallet> {
     async createUser(userId: string, registerDto: RegisterDTO, entitiyManager: EntityManager = null){
         const manager = this.getManager(entitiyManager);
 
+        const { account, password, mobile, name, birth: dob, sex_code } = registerDto;
         let userData = {
-            userId: userId,
-            ...registerDto
+            user_id: userId,
+            account,
+            password,
+            mobile,
+            name,
+            dob,
+            sex_code
         };
         const newUser = manager.create(UsersMedicalWallet, userData);
         const result = await manager.save(newUser);
         
-        return result.insertedAt;
+        return result.inserted_at;
     }
 }

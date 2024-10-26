@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { MessageService } from 'src/api/internal-services/api-message/message.service';
 import { RandomService } from 'src/common/crypto/services/random.service';
 import { IdService } from 'src/api/internal-services/api-id/id.service';
+import { PasswordService } from 'src/common/crypto/services/password.service';
 
 @Injectable()
 export class MedicalwalletService {
@@ -20,6 +21,7 @@ export class MedicalwalletService {
         private readonly accountService: AccountTokenService,
         private readonly mobileService: MobileTokenService,
         private readonly randomService: RandomService,
+        private readonly pwService: PasswordService,
         private readonly usersMWRepo: UsersMWRepository,
         private readonly messageService: MessageService,
         private readonly idService: IdService,
@@ -92,6 +94,11 @@ export class MedicalwalletService {
     async register(registerDto: RegisterDTO): Promise<RegisterResDTO> {
         const { mobile } = registerDto;
 
+        // hash password
+        registerDto.password = await this.pwService.hashPassword(registerDto.password);
+
+        console.log('1');
+
         const queryRunner = this.dataSource.createQueryRunner();
         try {
             // start Transaction
@@ -99,18 +106,18 @@ export class MedicalwalletService {
             await queryRunner.startTransaction();
             const manager = queryRunner.manager;
 
-            // 기존 mobile number 소유자가 있을 경우 NULL 처리
+            // set specific mobile column NULL when mobile number is already used.
             const existingUser = await this.usersMWRepo.findByMobile(mobile, manager);
             if (existingUser) {
-                const _ = await this.usersMWRepo.updateMobileToNull(existingUser.userId, manager);
+                const _ = await this.usersMWRepo.updateMobileToNull(existingUser.user_id, manager);
             }
 
-            // 고유 ID 요청
+            // request table id to id-generator
             const tableName = this.usersMWRepo.getTableName();
             const data = await this.idService.generateTableID(tableName);
             const userId = data.id;
 
-            // 유저 생성
+            // insert user
             const insertedAt = await this.usersMWRepo.createUser(userId, registerDto, manager);
 
             await queryRunner.commitTransaction();
@@ -120,11 +127,11 @@ export class MedicalwalletService {
             return dto;
 
         } catch (error) {
-            // 에러 발생 시 롤백
             await queryRunner.rollbackTransaction();
             if (error instanceof TypeORMError) {
                 throw new DatabaseException(error);
             }
+
             throw error;
         } finally {
             await queryRunner.release();

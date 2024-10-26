@@ -18,7 +18,7 @@ export function TypeormConfig(configService: ConfigService) {
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true, // false로 할 경우 entities를 통해 명시적인 로드 필요
-        synchronize: syncronize,
+        synchronize: syncronize, // only for development!!!
         useUTC: false, // Local Timezon이 아닌 UTC 기준으로 사용할지 여부를 결정
         logging: logging,
         retryAttempts: env === 'production' ? 10 : 1,

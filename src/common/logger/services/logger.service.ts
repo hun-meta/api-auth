@@ -25,7 +25,6 @@ export class LoggerService {
     }
 
     debug(message: string, value: any = undefined) {
-        // this.logger.debug(message, { context: this.context, ...this.formatMeta(meta) });
         this.logger.debug(message, { context: this.context, value });
     }
 }

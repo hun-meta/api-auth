@@ -4,7 +4,7 @@ import { CommonEntity } from './common.entity';
 @Entity('users_medicalwallet')
 export class UsersMedicalWallet extends CommonEntity {
     @PrimaryColumn({ type: 'bigint', unsigned: true, name: 'userId' })
-    userId: string; // keep it string to process 64bit int
+    user_id: string; // keep it string to process 64bit int
 
     @Column({ type: 'varchar', length: 20, unique: true })
     account: string;
@@ -23,8 +23,8 @@ export class UsersMedicalWallet extends CommonEntity {
     dob: Date;
 
     @Column({ type: 'varchar', length: 1 })
-    sexCode: string;
+    sex_code: string;
 
     @DeleteDateColumn({ type: 'datetime', precision: 6, nullable: true })
-    deletedAt: Date | null;
+    deleted_at: Date | null;
 }

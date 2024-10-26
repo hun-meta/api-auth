@@ -227,7 +227,7 @@ export const REGISTER_OPTS = createSwaggerOptions({
                 birth: {
                     type: 'string',
                     description: 'date of birth, YYYY-MM-DD',
-                    example: '01012345678',
+                    example: '1970-01-01',
                 },
                 sex_code: {
                     type: 'string',
@@ -242,7 +242,7 @@ export const REGISTER_OPTS = createSwaggerOptions({
         {
             status: 201,
             description: 'Register Success',
-            schema: { example: createBody(REGISTERED, { userId: '<user id value>', insertedAt: '<timestamp>' }) },
+            schema: { example: createBody(REGISTERED, { userId: '<user id value>', inserted_at: '<timestamp>' }) },
         },
         {
             status: 400,

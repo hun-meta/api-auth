@@ -17,8 +17,10 @@ export class RandomService {
         }
 
         let result = '';
-        for (let i = 0; i < length; i++) {
-            // 1자리씩 생성
+        
+        // first number shouldn't be 0
+        result += Math.floor(Math.random() * 9 + 1).toString();
+        for (let i = 1; i < length; i++) {
             result += Math.floor(Math.random() * 10).toString();
         }
 

@@ -11,11 +11,12 @@ export class RegisterGuard implements CanActivate {
     ) {}
 
     canActivate(context: ExecutionContext): boolean {
+        
         const request = context.switchToHttp().getRequest();
         const { accountToken, mobileToken } = this.extractTokens(request);
 
         const [accountPayload, mobilePayload] = this.verifyTokens(accountToken, mobileToken);
-
+    
         this.validateTokenPayloads(accountPayload, mobilePayload, request.body);
 
         return true;

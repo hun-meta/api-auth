@@ -21,7 +21,7 @@ export class IdService {
 
     // generate Table ID by API-ID
     async generateTableID(tableName: string): Promise<GenTableIdResDto> {
-        if (tableName.length > 0) {
+        if (tableName.length < 1) {
             throw new InternalServerErrorException(
                 `Validation failed: table name`,
             );
@@ -32,7 +32,7 @@ export class IdService {
         };
 
         try {
-            const result = await axios.post<BaseResponse<GenTableIdResDto>>(`${this.apiIdUrl}/v1/${tableName}/ids`, {
+            const result = await axios.post<BaseResponse<GenTableIdResDto>>(`${this.apiIdUrl}/v1/${tableName}/ids`, {}, {
                 headers,
             });
             return result.data.data;

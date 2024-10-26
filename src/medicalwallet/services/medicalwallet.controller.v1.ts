@@ -51,15 +51,14 @@ export class MedicalwalletController {
         return response;
     }
 
-    // TODO: set Swagger options & implement business logic
     // Register Medical Wallet user
     @Post('users')
     @UseGuards(RegisterGuard)
     @CustomSwaggerDecorator(REGISTER_OPTS)
     async register(@Body() registerDto: RegisterDTO): Promise<ControllerResponse<RegisterResDTO>> {
-        this.logger.debug('/users: ', registerDto);
         const registerResDto = await this.medicalwalletService.register(registerDto);
-        // const registerResDto = RegisterResDTO.create('', '');
-        return ControllerResponse.create<RegisterResDTO>(REGISTERED, registerResDto);
+        const response = ControllerResponse.create<RegisterResDTO>(REGISTERED, registerResDto);
+
+        return response;
     }
 }

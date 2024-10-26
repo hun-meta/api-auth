@@ -73,6 +73,9 @@ make delete-development
     # asymmetric key path for JWT (You should make your own rsa key)
     PRIVATE_KEY_PATH=config/keys/private_key.pem
     PUBLIC_KEY_PATH=config/keys/public_key.pem
+
+    # password hashing
+    SALT_ROUNDS=<hashing salt round value>
     ```
 - .env.development
     ```

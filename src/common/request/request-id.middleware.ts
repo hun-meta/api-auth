@@ -24,7 +24,11 @@ export class RequestIdMiddleware implements NestMiddleware {
         if (req.method === 'GET') {
             logMessage += `, Query: ${JSON.stringify(req.query)}`;
         } else if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.method)) {
-            logMessage += `, Body: ${JSON.stringify(req.body)}`;
+            const body = { ...req.body };
+            if(body.password){ 
+                body.password = 'unlogged';
+            }
+            logMessage += `, Body: ${JSON.stringify(body)}`;
         }
         this.logger.info(logMessage);
 
