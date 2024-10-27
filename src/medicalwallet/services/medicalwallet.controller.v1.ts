@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MedicalwalletService } from './medicalwallet.service';
 import { CheckAccountDTO, RegisterDTO, SendCodeDTO, VerifyCodeDTO } from '../dtos/request.dto';
 import { CheckAccountResDTO, RegisterResDTO, SendCodeResDTO, VerifyCodeResDTO } from '../dtos/response.dto';

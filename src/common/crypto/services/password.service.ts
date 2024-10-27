@@ -29,23 +29,9 @@ export class PasswordService {
      * @throws Error if hashing fails
      */
     async hashPassword(plainPassword: string): Promise<string> {
-        console.log('plainPassword: %o', plainPassword);
-        console.log('type of plainPassword: ', typeof plainPassword);
-        console.log('this.saltRounds: %o', this.saltRounds);
-        console.log('type of this.saltRounds: ', typeof this.saltRounds);
+
         try{
-            // const hashedPassword = await new Promise<string>((resolve, reject) => {
-            //     bcrypt.hash(plainPassword, this.saltRounds, function(err, hash) {
-            //       if (err) reject(err)
-            //       resolve(hash)
-            //     });
-            //   })
-
-            // const hashedPassword = await bcrypt.hash(plainPassword, this.saltRounds);
-
-            const hashedPassword = 'test';
-
-            console.log('hashedPassword: %o', hashedPassword);
+            const hashedPassword = await bcrypt.hash(plainPassword, this.saltRounds);
 
             return hashedPassword;
         }catch(error){
